@@ -13,7 +13,7 @@ class Token(object):
     # Symbol Table ::= Tokens 
     # Tokens ::= Token_Types Attributes
     # Token_Types ::= Keywords, operaors, relations, identifiers, constants, numbers, punctuation
-    # Attributes ::= Lexeme | Line_Number
+    # Attributes ::= [Lexeme | Number] Line_Number [ptr to symbol table]
     # Line_Number ::= size of input / \n
     # Lexeme ::= ID | NUM
     # ID ::= [A..Za..z]+[0..9_]*
