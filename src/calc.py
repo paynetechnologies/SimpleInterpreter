@@ -1,6 +1,7 @@
-from token import Token
+from .token import Token
 
 class Interpreter(object):
+    
     def __init__(self, text):
         # client string input, e.g. "3 + 5", "12 - 5", etc
         self.text = text
@@ -60,8 +61,8 @@ class Interpreter(object):
         return Token(Token.EOF, None)
 
     def eat(self, token_type):
-        # compare the current token type with the passed token type and 
-        # if they match then "eat" the current token and assign the next 
+        # compare the current token type with the passed token type and
+        # if they match then "eat" the current token and assign the next
         # token to the self.current_token, otherwise raise an exception.
         if self.current_token.type == token_type:
             self.current_token = self.get_next_token()
