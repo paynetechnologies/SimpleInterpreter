@@ -1,7 +1,9 @@
 from .token import Token
 
+
+
 class Interpreter(object):
-    
+
     def __init__(self, text):
         # client string input, e.g. "3 + 5", "12 - 5", etc
         self.text = text
@@ -11,8 +13,10 @@ class Interpreter(object):
         self.current_token = None
         self.current_char = self.text[self.pos]
 
+
     def error(self):
         raise Exception('Error parsing input')
+
 
     def advance(self):
         """Advance the 'pos' pointer and set the 'current_char' variable."""
@@ -22,10 +26,12 @@ class Interpreter(object):
         else:
             self.current_char = self.text[self.pos]
 
+
     def skip_whitespace(self):
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
-        
+
+
     def integer(self):
         """Return a (multidigit) integer consumed from the input."""
         result = ''
@@ -33,6 +39,7 @@ class Interpreter(object):
             result += self.current_char
             self.advance()
         return int(result)
+
 
     def get_next_token(self):
         """Lexical analyzer (also known as scanner or tokenizer)
@@ -60,6 +67,7 @@ class Interpreter(object):
 
         return Token(Token.EOF, None)
 
+
     def eat(self, token_type):
         # compare the current token type with the passed token type and
         # if they match then "eat" the current token and assign the next
@@ -68,6 +76,7 @@ class Interpreter(object):
             self.current_token = self.get_next_token()
         else:
             self.error()
+
 
     def expr(self):
         """Parser / Interpreter
@@ -83,6 +92,7 @@ class Interpreter(object):
 
         # we expect the current token to be either a '+' or '-'
         op = self.current_token
+
         if op.type == Token.PLUS:
             self.eat(Token.PLUS)
         elif op.type == Token.MINUS:
@@ -106,6 +116,8 @@ class Interpreter(object):
         else:
             result = left.value - right.value
         return result
+
+
 
 def main():
     while True:
