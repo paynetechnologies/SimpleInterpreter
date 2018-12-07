@@ -20,7 +20,7 @@ class Token(object):
     # NUM ::= [0..9]+
 
        
-    INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, EOF = 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'EOF'
+    INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN< EOF = 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF'
 
     def __init__(self, type, value):
         
@@ -46,3 +46,8 @@ class Token(object):
 
     def __repr__(self):
         return self.__str__()
+
+
+if __name__ == '__main__':
+    t = Token(Token.INTEGER, 12)
+    print(t)
