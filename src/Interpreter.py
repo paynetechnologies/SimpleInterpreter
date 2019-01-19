@@ -88,6 +88,30 @@ class Interpreter(object):
         else:
             self.error('Unknown toke type : ' + token_type)
 
+    
+    def expr(self):
+        """
+        Parser / Interpreter
+        EXPR -> [TERM OP TERM]+ 
+        TERM -> [INTEGER]+
+        INTEGER -> [0..9] 
+        OP -> PLUS | MINUS | MULTIPLY | DIVIDE
+        """
+        # set current token to the first token taken from the input
+        self.current_token = self.get_next_token() 
+
+        result = self.term()
+        while self.current_token.type in (Token.PLUS, Token.MINUS):
+            token = self.current_token
+            if (token.type == Token.PLUS):
+                self.match(Token.PLUS)
+                result = result + self.term()
+            elif (token.type == Token.MINUS):
+                self.match(Token.MINUS)
+                result = result - self.term()
+        
+        return result
+
     # def term(self):
     #     ''' A TERM is + | - '''
     #     token = self.current_token
@@ -99,19 +123,16 @@ class Interpreter(object):
         ''' A TERM -> + | - '''
 
         token = self.current_token
-        self.factor()
 
+        self.factor()
         while (True):
 
             if (self.current_token.type in ['*','/','DIV','MOD']):
                 t = self.get_next_token()
                 self.match(t)
                 self.factor()
-                #emit(t, Token.NONE)
-                return token.value
 
-            else:
-                return token.value
+            return token.value
 
 
     def factor(self):
@@ -134,27 +155,7 @@ class Interpreter(object):
         else:
             self.error("factor syntax error")
 
-    def expr(self):
-        """Parser / Interpreter
-        EXPR -> [TERM OP TERM]+ 
-        TERM -> [INTEGER]+
-        INTEGER -> [0..9] 
-        OP -> PLUS | MINUS | MULTIPLY | DIVIDE
-        """
-        
-        self.current_token = self.get_next_token() # set current token to the first token taken from the input
-        result = self.term()
 
-        while self.current_token.type in (Token.PLUS, Token.MINUS):
-            token = self.current_token
-            if (token.type == Token.PLUS):
-                self.match(Token.PLUS)
-                result = result + self.term()
-            elif (token.type == Token.MINUS):
-                self.match(Token.MINUS)
-                result = result - self.term()
-        
-        return result
 
     # def expr(self):
     

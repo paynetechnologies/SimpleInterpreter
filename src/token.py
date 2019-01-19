@@ -20,7 +20,8 @@ class Token(object):
     # NUM ::= [0..9]+
 
        
-    INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN< EOF = 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF'
+    INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN, EOF = \
+        'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF'
 
     def __init__(self, type, value):
         
