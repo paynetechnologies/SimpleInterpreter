@@ -167,17 +167,18 @@ class ParseTreeVisualizer(object):
 
 
 def main():
-    argparser = argparse.ArgumentParser(
-        description='Generate a Parse Tree DOT file.'
-    )
-    argparser.add_argument(
-        'text',
-        help='Arithmetic expression (in quotes): "1 + 2 * 3"'
-    )
-    args = argparser.parse_args()
-    text = args.text
+    # argparser = argparse.ArgumentParser(
+    #     description='Generate a Parse Tree DOT file.'
+    # )
+    # argparser.add_argument(
+    #     'text',
+    #     help='Arithmetic expression (in quotes): "1 + 2 * 3"'
+    # )
+    # args = argparser.parse_args()
+    # text = args.text
 
-    lexer = Lexer(text)
+    #lexer = Lexer(text)
+    lexer = Lexer("1 + 2 * 3")
     parser = Parser(lexer)
 
     viz = ParseTreeVisualizer(parser)
