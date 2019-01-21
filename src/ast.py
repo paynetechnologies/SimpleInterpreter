@@ -14,3 +14,7 @@ class Num(AST):
         self.token = token
         self.value = token.value
         
+class UnaryOp(AST):
+    def __init__(self, op, expr):
+        self.token = self.op = op
+        self.expr = expr

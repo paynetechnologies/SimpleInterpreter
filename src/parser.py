@@ -1,4 +1,4 @@
-from src.ast import AST, BinOp, Num
+from src.ast import AST, BinOp, Num, UnaryOp
 from src.lexer import Lexer
 from src.token import Token
 
@@ -29,10 +29,19 @@ class Parser(object):
         ''' 
         #7
         FACTOR -> INTEGER | LPAREN EXPR RPAREN 
+        #8
+        factor : (PLUS | MINUS) factor | INTEGER | LPAREN expr RPAREN
         '''
         token = self.current_token
-
-        if token.type == Token.INTEGER:
+        if token.type == Token.PLUS:
+            self.match(Token.PLUS)
+            node = UnaryOp(token, self.factor())
+            return node
+        elif token.type == Token.MINUS:
+            self.match(Token.MINUS)
+            node = UnaryOp(token, self.factor())
+            return node
+        elif token.type == Token.INTEGER:
             self.match(Token.INTEGER)
             return Num(token)
         elif token.type == Token.LPAREN:
@@ -67,6 +76,8 @@ class Parser(object):
         EXPR -> TERM (ADDOP TERM)*
         TERM -> FACTOR ((MULOP) FACTOR)*
         FACTOR -> [INTEGER] | LPAREN EXPR RPAREN
+        #8 
+        FACTOR -> (PLUS | MINUS) FACTOR | [INTEGER] | LPAREN EXPR RPAREN
         """
         # set current token to the first token taken from the input
         # not in #6 - self.current_token = self.get_next_token() 
