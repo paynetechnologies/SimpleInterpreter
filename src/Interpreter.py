@@ -3,6 +3,7 @@ from src.lexer import Lexer
 from src.parser import Parser
 
 class NodeVisitor(object):
+    
     def visit(self, node):
         method_name = 'visit_' + type(node).__name__
         visitor = getattr(self, method_name, self.generic_visit)

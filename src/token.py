@@ -1,4 +1,4 @@
-
+''' Token Class '''
 class Token(object):
     ''' 
     Token 
@@ -11,7 +11,6 @@ class Token(object):
     INTEGER, NUM, ID, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF = (
         'INTEGER', 'NUM', 'ID', 'PLUS', 'MINUS', 'MUL', 'DIV', 'LPAREN', 'RPAREN', 'EOF'
     )
-
 
     def __init__(self, type, value):
         
@@ -39,7 +38,7 @@ class Token(object):
 
 
 if __name__ == '__main__':
-    t = Token(INTEGER, 12)
+    t = Token(Token.INTEGER, 12)
     print(t)
 
 

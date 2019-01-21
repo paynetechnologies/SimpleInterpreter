@@ -1,4 +1,4 @@
-'''parser'''
+'''Lexer'''
 from src.token import Token
 
 class Lexer(object):
@@ -80,8 +80,6 @@ class Lexer(object):
         return Token(Token.EOF, None)
 
 
-
-
 def runmain():
     while True:
         try:
@@ -97,57 +95,3 @@ def runmain():
 
 if __name__ == '__main__':
     runmain()
-
-
-# def expr(self):
-
-#     self.term()
-    
-#     while(True):
-
-#         if (parser.lookahead == '+' or parser.lookahead == '-'):
-#             t = parser.lookahead
-#             self.match(t); 
-#             self.term(); 
-#             emit(t, Token.NONE)
-
-#         else:
-#             return
-
-    '''
-    # we expect the current token to be an integer
-    left = self.current_token
-    self.match(Token.INTEGER)
-    
-    # we expect the current token to be either a '+' or '-'
-    op = self.current_token
-
-    if op.type == Token.PLUS:
-        self.match(Token.PLUS)
-    elif op.type == Token.MINUS:
-        self.match(Token.MINUS)
-    elif op.type == Token.MULTIPLY:
-        self.match(Token.MULTIPLY)
-    elif op.type == Token.DIVIDE:
-        self.match(Token.DIVIDE)
-
-    # we expect the current token to be an integer
-    right = self.current_token
-    self.match(Token.INTEGER)
-    # after the above call the self.current_token is set to EOF token
-
-    # at this point either the INTEGER PLUS INTEGER or the INTEGER MINUS 
-    # INTEGER sequence of tokens has been successfully found and the method 
-    # can just return the result of adding or subtracting two integers, thus 
-    # effectively interpreting client input
-    if op.type == Token.PLUS:
-        result = left.value + right.value
-    elif op.type == Token.MINUS:   
-        result = left.value - right.value
-    elif op.type == Token.MULTIPLY:   
-        result = left.value * right.value
-    elif op.type == Token.DIVIDE:   
-        result = left.value / right.value
-    return result
-    '''
-
