@@ -1,5 +1,6 @@
 program factorial;
 
+
 function factorial(n: integer): longint;
 begin
     if n = 0 then

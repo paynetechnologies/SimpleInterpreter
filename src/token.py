@@ -1,23 +1,8 @@
+''' Token Class '''
 class Token(object):
-    ''' Token '''
-  
-    # keywords ::= while | return | if | elif | 
-    # operators ::= +, -, *, /, **
-    # relations ::= >, >=, <, <=, =, <>     
-    # identifiers ::= [A..Za..z]+[0..9_]*
-    # constants ::= pi | 
-    # numbers ::= [0..9]+
-    # punctuation ::= ; 
-    # EOF (end-of-file) token is used to indicate that there is no more input left for lexical analysis
-    
-    # Symbol Table ::= Tokens 
-    # Tokens ::= Token_Types Attributes
-    # Token_Types ::= Keywords, operaors, relations, identifiers, constants, numbers, punctuation
-    # Attributes ::= [Lexeme | Number] Line_Number [ptr to symbol table]
-    # Line_Number ::= size of input / \n
-    # Lexeme ::= ID | NUM
-    # ID ::= [A..Za..z]+[0..9_]*
-    # NUM ::= [0..9]+
+    ''' 
+    Token 
+    '''
 
        
     ID, INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN, EOF = 'ID', 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF'
