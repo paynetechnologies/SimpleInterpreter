@@ -12,7 +12,6 @@ class NodeVisitor(object):
     def generic_visit(self, node):
         raise Exception('No visit_{} method'.format(type(node).__name__))
 
-
 class Interpreter(NodeVisitor):
     def __init__(self, parser):
         self.parser = parser

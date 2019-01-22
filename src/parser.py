@@ -2,6 +2,7 @@ from src.ast import AST, BinOp, Num, UnaryOp
 from src.lexer import Lexer
 from src.token import Token
 
+
 class Parser(object):
 
     def __init__(self, lexer):

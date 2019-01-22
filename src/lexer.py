@@ -93,6 +93,5 @@ def runmain():
         result = interpreter.interpret()
         print(result)
 
-
 if __name__ == '__main__':
     runmain()

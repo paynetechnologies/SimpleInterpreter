@@ -6,7 +6,7 @@ class Token(object):
     # Token types
     # EOF (end-of-file) token is used to indicate that
     # there is no more input left for lexical analysis       
-    IDENT, INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF, BEGIN, END, DOT, ASSIGN, SEMI = ( \
+    (ID, INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF, BEGIN, END, DOT, ASSIGN, SEMI) = ( \
          'ID', 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF', 'BEGIN', \
          'END', 'DOT', 'ASSIGN', 'SEMI')
 
@@ -32,6 +32,11 @@ class Token(object):
     def __repr__(self):
         return self.__str__()
 
+
+RESERVED_KEYWORDS = {
+    'BEGIN': Token('BEGIN', 'BEGIN'),
+    'END': Token('END', 'END'),
+}
 
 if __name__ == '__main__':
     t = Token(Token.INTEGER, 12)
