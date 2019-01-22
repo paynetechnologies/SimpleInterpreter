@@ -1,19 +1,19 @@
 ''' Token Class '''
 class Token(object):
+    ''' 
+    Token 
     '''
-    Token
-    '''
-    IDENT, INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF, BEGIN, END, DOT, ASSIGN, SEMI = \
+    # Token types
+    # EOF (end-of-file) token is used to indicate that
+    # there is no more input left for lexical analysis       
+    IDENT, INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF, BEGIN, END, DOT, ASSIGN, SEMI = ( \
          'ID', 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF', 'BEGIN', \
-         'END', 'DOT', 'ASSIGN', 'SEMI'
+         'END', 'DOT', 'ASSIGN', 'SEMI')
 
-    def __init__(self, token_type, token_value):
-
-        # token type: INTEGER, PLUS, or EOF
-        self.token_type = token_type
-
+    def __init__(self, type, value):
+        self.type = type
         # token value: 0, 1, 2. 3, 4, 5, 6, 7, 8, 9, '+', '-', '*', '/',or None
-        self.token_value = token_value
+        self.value = value
 
     def __str__(self):
         """String representation of the class instance.
@@ -25,8 +25,8 @@ class Token(object):
             Token(DIVIDE '/')
         """
         return 'Token({type}, {value})'.format(
-            type=self.token_type,
-            value=repr(self.token_value)
+            type=self.type,
+            value=repr(self.value)
         )
 
     def __repr__(self):
@@ -36,3 +36,22 @@ class Token(object):
 if __name__ == '__main__':
     t = Token(Token.INTEGER, 12)
     print(t)
+
+
+    # keywords ::= while | return | if | elif | 
+    # operators ::= +, -, *, /, **
+    # relations ::= >, >=, <, <=, =, <>     
+    # identifiers ::= [A..Za..z]+[0..9_]*
+    # constants ::= pi | 
+    # numbers ::= [0..9]+
+    # punctuation ::= ; 
+    # EOF (end-of-file) token is used to indicate that there is no more input left for lexical analysis
+    
+    # Symbol Table ::= Tokens 
+    # Tokens ::= Token_Types Attributes
+    # Token_Types ::= Keywords, operaors, relations, identifiers, constants, numbers, punctuation
+    # Attributes ::= [Lexeme | Number] Line_Number [ptr to symbol table]
+    # Line_Number ::= size of input / \n
+    # Lexeme ::= ID | NUM
+    # ID ::= [A..Za..z]+[0..9_]*
+    # NUM ::= [0..9]+    

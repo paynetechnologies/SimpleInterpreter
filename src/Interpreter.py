@@ -18,20 +18,20 @@ class Interpreter(NodeVisitor):
         self.parser = parser
 
     def visit_BinOp(self, node):
-        if node.op.token_type == Token.PLUS:
+        if node.op.type == Token.PLUS:
             return self.visit(node.left) + self.visit(node.right)
-        elif node.op.token_type == Token.MINUS:
+        elif node.op.type == Token.MINUS:
             return self.visit(node.left) - self.visit(node.right)
-        elif node.op.token_type == Token.MUL:
+        elif node.op.type == Token.MUL:
             return self.visit(node.left) * self.visit(node.right)
-        elif node.op.token_type == Token.DIV:
+        elif node.op.type == Token.DIV:
             return self.visit(node.left) / self.visit(node.right)
 
     def visit_Num(self, node):
         return node.value
 
     def visit_UnaryOp(self, node):
-        op = node.op.token_type
+        op = node.op.type
         if op == Token.PLUS:
             return +self.visit(node.expr)
         elif op == Token.MINUS:
