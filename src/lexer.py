@@ -1,5 +1,6 @@
 '''Lexer'''
 from src.token import Token
+#from src.Interpreter import Interpreter
 
 class Lexer(object):
     '''Lexer'''
@@ -89,7 +90,7 @@ def runmain():
         if not text:
             continue
         interpreter = Interpreter(text)
-        result = interpreter.expr()
+        result = interpreter.interpret()
         print(result)
 
 

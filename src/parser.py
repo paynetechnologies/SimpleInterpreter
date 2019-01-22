@@ -18,7 +18,7 @@ class Parser(object):
         if they match then "eat" the current token and assign the next
         token to the self.current_token, otherwise raise an exception.
         '''
-        if self.current_token.type == token_type:
+        if self.current_token.token_type == token_type:
             self.current_token = self.lexer.get_next_token()
         else:
             self.error('Unknown token type : ' + token_type)
@@ -33,18 +33,18 @@ class Parser(object):
         factor : (PLUS | MINUS) factor | INTEGER | LPAREN expr RPAREN
         '''
         token = self.current_token
-        if token.type == Token.PLUS:
+        if token.token_type == Token.PLUS:
             self.match(Token.PLUS)
             node = UnaryOp(token, self.factor())
             return node
-        elif token.type == Token.MINUS:
+        elif token.token_type == Token.MINUS:
             self.match(Token.MINUS)
             node = UnaryOp(token, self.factor())
             return node
-        elif token.type == Token.INTEGER:
+        elif token.token_type == Token.INTEGER:
             self.match(Token.INTEGER)
             return Num(token)
-        elif token.type == Token.LPAREN:
+        elif token.token_type == Token.LPAREN:
             self.match(Token.LPAREN)
             node = self.expr()
             self.match(Token.RPAREN)
@@ -58,7 +58,7 @@ class Parser(object):
 
         node = self.factor()
 
-        while self.current_token.type in (Token.MUL, Token.DIV):
+        while self.current_token.token_type in (Token.MUL, Token.DIV):
             token = self.current_token
             if token.type == Token.MUL:
                 self.match(Token.MUL)
@@ -84,11 +84,11 @@ class Parser(object):
 
         node = self.term()
 
-        while self.current_token.type in (Token.PLUS, Token.MINUS):
+        while self.current_token.token_type in (Token.PLUS, Token.MINUS):
             token = self.current_token
-            if (token.type == Token.PLUS):
+            if (token.token_type == Token.PLUS):
                 self.match(Token.PLUS)
-            elif (token.type == Token.MINUS):
+            elif (token.token_type == Token.MINUS):
                 self.match(Token.MINUS)
        
             node = BinOp(left=node, op=token, right=self.term())

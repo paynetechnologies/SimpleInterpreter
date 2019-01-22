@@ -12,7 +12,7 @@ class BinOp(AST):
 class Num(AST):
     def __init__(self, token):
         self.token = token
-        self.value = token.value
+        self.value = token.token_value
         
 class UnaryOp(AST):
     def __init__(self, op, expr):

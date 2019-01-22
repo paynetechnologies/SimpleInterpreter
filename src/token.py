@@ -1,14 +1,14 @@
 ''' Token Class '''
 class Token(object):
-    ''' 
-    Token 
     '''
-
-       
-    ID, INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN, EOF = 'ID', 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF'
+    Token
+    '''
+    IDENT, INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF, BEGIN, END, DOT, ASSIGN, SEMI = \
+         'ID', 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF', 'BEGIN', \
+         'END', 'DOT', 'ASSIGN', 'SEMI'
 
     def __init__(self, token_type, token_value):
-        
+
         # token type: INTEGER, PLUS, or EOF
         self.token_type = token_type
 
