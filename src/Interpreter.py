@@ -57,6 +57,18 @@ def main():
         result = interpreter.interpret()
         print(result)
 
-
 if __name__ == '__main__':
     main()
+
+
+'''
+$ python spi.py
+spi> - 3
+-3
+spi> + 3
+3
+spi> 5 - - - + - 3
+8
+spi> 5 - - - + - (3 + 4) - +2
+10
+'''    
