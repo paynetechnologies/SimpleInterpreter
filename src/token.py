@@ -20,15 +20,15 @@ class Token(object):
     # NUM ::= [0..9]+
 
        
-    INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN< EOF = 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF'
+    ID, INTEGER, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN, EOF = 'ID', 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF'
 
-    def __init__(self, type, value):
+    def __init__(self, token_type, token_value):
         
         # token type: INTEGER, PLUS, or EOF
-        self.type = type
+        self.token_type = token_type
 
         # token value: 0, 1, 2. 3, 4, 5, 6, 7, 8, 9, '+', '-', '*', '/',or None
-        self.value = value
+        self.token_value = token_value
 
     def __str__(self):
         """String representation of the class instance.
@@ -40,8 +40,8 @@ class Token(object):
             Token(DIVIDE '/')
         """
         return 'Token({type}, {value})'.format(
-            type=self.type,
-            value=repr(self.value)
+            type=self.token_type,
+            value=repr(self.token_value)
         )
 
     def __repr__(self):

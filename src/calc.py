@@ -83,7 +83,7 @@ class Interpreter(object):
         if they match then "eat" the current token and assign the next
         token to the self.current_token, otherwise raise an exception.
         '''
-        if self.current_token.type == token_type:
+        if self.current_token.token_type == token_type:
             self.current_token = self.get_next_token()
         else:
             self.error('Unknown toke type : ' + token_type)
@@ -103,34 +103,34 @@ class Interpreter(object):
 
         while (True):
 
-            if (self.current_token.type in ['*','/','DIV','MOD']):
+            if (self.current_token.token_type in ['*','/','DIV','MOD']):
                 t = self.get_next_token()
                 self.match(t)
                 self.factor()
                 #emit(t, Token.NONE)
-                return token.value
+                return token.token_value
 
             else:
-                return token.value
+                return token.token_value
 
 
     def factor(self):
         ''' A Factory -> ( expr ) | NUM | ID '''
-        if (self.current_token.type == Token.LPAREN == "("):
+        if (self.current_token.token_type == Token.LPAREN == "("):
             self.match("(") 
             self.expr()
             self.match(")")
-            return token.value
+            #return token.value
 
-        elif (self.current_token.type == Token.NUM):
+        elif (self.current_token.token_type == Token.INTEGER):
             #emit(Token.NUM, Token.token_value) ; 
-            self.match(Token.NUM)
-            return token.value
+            self.match(Token.INTEGER)
+            #return token.value
 
-        elif (self.current_token.type == Token.ID):
+        elif (self.current_token.token_type == Token.ID):
             #emit(Token.ID, Token.token_value); 
             self.match(Token.ID)
-            return token.value
+            #return token.value
         else:
             self.error("factor syntax error")
 
@@ -145,12 +145,12 @@ class Interpreter(object):
         self.current_token = self.get_next_token() # set current token to the first token taken from the input
         result = self.term()
 
-        while self.current_token.type in (Token.PLUS, Token.MINUS):
+        while self.current_token.token_type in (Token.PLUS, Token.MINUS):
             token = self.current_token
-            if (token.type == Token.PLUS):
+            if (token.token_type == Token.PLUS):
                 self.match(Token.PLUS)
                 result = result + self.term()
-            elif (token.type == Token.MINUS):
+            elif (token.token_type == Token.MINUS):
                 self.match(Token.MINUS)
                 result = result - self.term()
         
