@@ -7,55 +7,72 @@ class LexerTestCase(unittest.TestCase):
         lexer = Lexer(text)
         return lexer
 
-    def test_lexer_integer(self):
+    def test_01_lexer_integer(self):
         from src.token import Token
         lexer = self.makeLexer('234')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.INTEGER)
         self.assertEqual(token.value, 234)
 
-    def test_lexer_mul(self):
+    def test_02_lexer_mul(self):
         from src.token import Token
         lexer = self.makeLexer('*')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.MUL)
         self.assertEqual(token.value, '*')
 
-    def test_lexer_div(self):
+    def test_03_lexer_div(self):
         from src.token import Token
         lexer = self.makeLexer(' / ')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.DIV)
         self.assertEqual(token.value, '/')
 
-    def test_lexer_plus(self):
+    def test_04_lexer_plus(self):
         from src.token import Token
         lexer = self.makeLexer('+')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.PLUS)
         self.assertEqual(token.value, '+')
 
-    def test_lexer_minus(self):
+    def test_05_lexer_minus(self):
         from src.token import Token
         lexer = self.makeLexer('-')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.MINUS)
         self.assertEqual(token.value, '-')
 
-    def test_lexer_lparen(self):
+    def test_06_lexer_lparen(self):
         from src.token import Token
         lexer = self.makeLexer('(')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.LPAREN)
         self.assertEqual(token.value, '(')
 
-    def test_lexer_rparen(self):
+    def test_07_lexer_rparen(self):
         from src.token import Token
         lexer = self.makeLexer(')')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.RPAREN)
         self.assertEqual(token.value, ')')
 
+    def test_08_lexer_new_tokens(self):
+        from src.token import Token
+        #ASSIGN,  DOT, ID, SEMI, BEGIN, END
+
+        records = (
+            (':=', Token.ASSIGN, ':='),
+            ('.', Token.DOT, '.'),
+            ('number', Token.ID, 'number'),
+            (';', Token.SEMI, ';'),
+            ('BEGIN', Token.BEGIN, 'BEGIN'),
+            ('END', Token.END, 'END'),
+        )
+        for text, tok_type, tok_val in records:
+            lexer = self.makeLexer(text)
+            token = lexer.get_next_token()
+            self.assertEqual(token.type, tok_type)
+            self.assertEqual(token.value, tok_val)
 
 class InterpreterTestCase(unittest.TestCase):
     def makeInterpreter(self, text):
@@ -67,78 +84,86 @@ class InterpreterTestCase(unittest.TestCase):
         interpreter = Interpreter(parser)
         return interpreter
 
-    def test_expression1(self):
-        interpreter = self.makeInterpreter('3')
-        result = interpreter.interpret()
-        self.assertEqual(result, 3)
+    def test_09_arithmetic_expressions(self):
+        for expr, result in (
+            ('3', 3),
+            ('2 + 7 * 4', 30),
+            ('7 - 8 / 4', 5),
+            ('14 + 2 * 3 - 6 / 2', 17),
+            ('7 + 3 * (10 / (12 / (3 + 1) - 1))', 22),
+            ('7 + 3 * (10 / (12 / (3 + 1) - 1)) / (2 + 3) - 5 - 3 + (8)', 10),
+            ('7 + (((3 + 2)))', 12),
+            ('- 3', -3),
+            ('+ 3', 3),
+            ('5 - - - + - 3', 8),
+            ('5 - - - + - (3 + 4) - +2', 10),
+        ):
+            interpreter = self.makeInterpreter('BEGIN a := %s END.' % expr)
+            interpreter.interpret()
+            globals = interpreter.GLOBAL_SCOPE
+            self.assertEqual(globals['a'], result)
 
-    def test_expression2(self):
-        interpreter = self.makeInterpreter('2 + 7 * 4')
-        result = interpreter.interpret()
-        self.assertEqual(result, 30)
-
-    def test_expression3(self):
-        interpreter = self.makeInterpreter('7 - 8 / 4')
-        result = interpreter.interpret()
-        self.assertEqual(result, 5)
-
-    def test_expression4(self):
-        interpreter = self.makeInterpreter('14 + 2 * 3 - 6 / 2')
-        result = interpreter.interpret()
-        self.assertEqual(result, 17)
-
-    def test_expression5(self):
-        interpreter = self.makeInterpreter('7 + 3 * (10 / (12 / (3 + 1) - 1))')
-        result = interpreter.interpret()
-        self.assertEqual(result, 22)
-
-    def test_expression6(self):
-        interpreter = self.makeInterpreter(
-            '7 + 3 * (10 / (12 / (3 + 1) - 1)) / (2 + 3) - 5 - 3 + (8)'
-        )
-        result = interpreter.interpret()
-        self.assertEqual(result, 10)
-
-    def test_expression7(self):
-        interpreter = self.makeInterpreter('7 + (((3 + 2)))')
-        result = interpreter.interpret()
-        self.assertEqual(result, 12)
-
-    def test_expression8(self):
-        interpreter = self.makeInterpreter('- 3')
-        result = interpreter.interpret()
-        self.assertEqual(result, -3)
-
-    def test_expression9(self):
-        interpreter = self.makeInterpreter('+ 3')
-        result = interpreter.interpret()
-        self.assertEqual(result, 3)
-
-    def test_expression10(self):
-        interpreter = self.makeInterpreter('5 - - - + - 3')
-        result = interpreter.interpret()
-        self.assertEqual(result, 8)
-
-    def test_expression11(self):
-        interpreter = self.makeInterpreter('5 - - - + - (3 + 4) - +2')
-        result = interpreter.interpret()
-        self.assertEqual(result, 10)
-
-    def test_no_expression(self):
-        interpreter = self.makeInterpreter('   ')
-        result = interpreter.interpret()
-        self.assertEqual(result, '')
-
-    def test_expression_invalid_syntax1(self):
+    def test_010_expression_invalid_syntax1(self):
         interpreter = self.makeInterpreter('10 *')
         with self.assertRaises(Exception):
             interpreter.interpret()
 
-    def test_expression_invalid_syntax2(self):
+    def test_011_expression_invalid_syntax2(self):
         interpreter = self.makeInterpreter('1 (1 + 2)')
         with self.assertRaises(Exception):
             interpreter.interpret()
 
+    def test_012_expression_invalid_syntax3(self):
+        interpreter = self.makeInterpreter('BEGIN a := 10 * ; END.')
+        with self.assertRaises(Exception):
+            interpreter.interpret()
+
+    def test_013_expression_invalid_syntax4(self):
+        interpreter = self.makeInterpreter('BEGIN a := 1 (1 + 2); END.')
+        with self.assertRaises(Exception):
+            interpreter.interpret()
+
+    def test_014_statements(self):
+        text = """\
+BEGIN
+
+    BEGIN
+        number := 2;
+        a := number;
+        b := 10 * a + 10 * number / 4;
+        c := a - - b
+    END;
+
+    x := 11;
+END.
+"""
+        interpreter = self.makeInterpreter(text)
+        interpreter.interpret()
+
+        globals = interpreter.GLOBAL_SCOPE
+        self.assertEqual(len(globals.keys()), 5)
+        self.assertEqual(globals['number'], 2)
+        self.assertEqual(globals['a'], 2)
+        self.assertEqual(globals['b'], 25)
+        self.assertEqual(globals['c'], 27)
+        self.assertEqual(globals['x'], 11)
+
 
 if __name__ == '__main__':
     unittest.main()
+
+
+'''
+try:
+    linux_interaction()
+except AssertionError as error:
+    print(error)
+else:
+    try:
+        with open('file.log') as file:
+            read_data = file.read()
+    except FileNotFoundError as fnf_error:
+        print(fnf_error)
+finally:
+    print('Cleaning up, irrespective of any exceptions.')
+'''    

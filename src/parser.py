@@ -1,4 +1,4 @@
-from src.ast import AST, BinOp, Num, UnaryOp
+from src.ast import AST, BinOp, Num, UnaryOp, Compound, Assign, Var, NoOp
 from src.lexer import Lexer
 from src.token import Token
 
@@ -10,7 +10,7 @@ class Parser(object):
         self.current_token = self.lexer.get_next_token() # set current token to first token from the input
 
     def error(self, msg):
-        raise Exception(f'Invalid syntax : {msg}')    
+        raise ValueError(f'Invalid syntax : {msg}')    
 
     def match(self, token_type):
         ''' 
@@ -21,7 +21,7 @@ class Parser(object):
         if self.current_token.type == token_type:
             self.current_token = self.lexer.get_next_token()
         else:
-            self.error('Unknown token type : ' + token_type)
+            self.error(f'Unknown token type : {token_type}')
 
     def program(self):
         """program : compound_statement DOT"""
@@ -38,7 +38,7 @@ class Parser(object):
         nodes = self.statement_list()
         self.match(Token.END)
 
-        root = self.Compound(self)
+        root = Compound()
         for node in nodes:
             root.children.append(node)
 
@@ -58,7 +58,7 @@ class Parser(object):
             results.append(self.statement())
 
         if self.current_token.type == Token.ID:
-            self.error()
+            self.error('statement SEMI statement_list')
 
         return results
 
@@ -198,6 +198,6 @@ class Parser(object):
         """
         node = self.program()
         if self.current_token.type != Token.EOF:
-            self.error()
+            self.error('Missing EOF')
 
         return node
