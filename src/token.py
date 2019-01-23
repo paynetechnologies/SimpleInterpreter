@@ -1,19 +1,19 @@
 ''' Token Class '''
-class Token(object):
+class Token():
     ''' 
     Token 
     '''
     # Token types
     # EOF (end-of-file) token is used to indicate that
     # there is no more input left for lexical analysis       
-    (ID, INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF, BEGIN, END, DOT, ASSIGN, SEMI) = ( \
-         'ID', 'INTEGER', 'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'LPAREN', 'RPAREN', 'EOF', 'BEGIN', \
-         'END', 'DOT', 'ASSIGN', 'SEMI')
+    (ASSIGN, BEGIN, DIV, DOT, END, EOF, ID, INTEGER, LPAREN, MINUS, MUL, PLUS, RPAREN, SEMI) = ( \
+        'ASSIGN', 'BEGIN', 'DIV', 'DOT', 'END', 'EOF', 'ID', 'INTEGER', 'LPAREN', \
+        'MINUS', 'MUL', 'PLUS', 'RPAREN', 'SEMI') 
+
 
     def __init__(self, type, value):
         self.type = type
-        # token value: 0, 1, 2. 3, 4, 5, 6, 7, 8, 9, '+', '-', '*', '/',or None
-        self.value = value
+        self.value = value         # token value: 0, 1, 2. 3...'+', '-', '*', '/', ID, None
 
     def __str__(self):
         """String representation of the class instance.
@@ -22,7 +22,6 @@ class Token(object):
             Token(INTEGER, 3)
             Token(PLUS '+')
             Token(MULTIPLY '*')
-            Token(DIVIDE '/')
         """
         return 'Token({type}, {value})'.format(
             type=self.type,
@@ -34,13 +33,13 @@ class Token(object):
 
 
 RESERVED_KEYWORDS = {
-    'BEGIN': Token('BEGIN', 'BEGIN'),
-    'END': Token('END', 'END'),
-}
+    'BEGIN': Token(Token.BEGIN, Token.BEGIN),
+    'END': Token(Token.END, Token.END),
+    }
 
 if __name__ == '__main__':
-    t = Token(Token.INTEGER, 12)
-    print(t)
+    #t = Token(Token.INTEGER, Token.INTEGER)
+    print(Token(Token.INTEGER, Token.INTEGER))
 
 
     # keywords ::= while | return | if | elif | 

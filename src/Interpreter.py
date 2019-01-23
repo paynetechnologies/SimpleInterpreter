@@ -1,4 +1,4 @@
-from src.token import Token
+from src.token import Token, RESERVED_KEYWORDS
 from src.lexer import Lexer
 from src.parser import Parser
 
@@ -13,6 +13,9 @@ class NodeVisitor(object):
         raise Exception('No visit_{} method'.format(type(node).__name__))
 
 class Interpreter(NodeVisitor):
+
+    GLOBAL_SCOPE = {}
+
     def __init__(self, parser):
         self.parser = parser
 
@@ -26,8 +29,10 @@ class Interpreter(NodeVisitor):
         elif node.op.type == Token.DIV:
             return self.visit(node.left) / self.visit(node.right)
 
+
     def visit_Num(self, node):
         return node.value
+
 
     def visit_UnaryOp(self, node):
         op = node.op.type
@@ -36,15 +41,41 @@ class Interpreter(NodeVisitor):
         elif op == Token.MINUS:
             return -self.visit(node.expr)
 
+
+    def visit_Compound(self, node):
+        for child in node.children:
+            self.visit(child)
+
+    def visit_Assign(self, node):
+        var_name = node.left.value
+        self.GLOBAL_SCOPE[var_name] = self.visit(node.right)
+
+    def visit_Var(self, node):
+        var_name = node.value
+        val = self.GLOBAL_SCOPE.get(var_name)
+        if val is None:
+            raise NameError(repr(var_name))
+        else:
+            return val
+
+    def visit_NoOp(self, node):
+        pass
+
+
     def interpret(self):
         tree = self.parser.parse()
+        if tree is None:
+            return ''
         return self.visit(tree)
 
 
 def main():
+    #import sys
     while True:
         try:
-            text = input('spi> ')
+            #text = input('spi> ')
+            #text = open(sys.argv[1], 'r').read()
+            text = open('src/test/pascal.txt', 'r').read()
         except EOFError:
             break
         if not text:
@@ -54,7 +85,7 @@ def main():
         parser = Parser(lexer)
         interpreter = Interpreter(parser)
         result = interpreter.interpret()
-        print(result)
+    print(interpreter.GLOBAL_SCOPE)        
 
 if __name__ == '__main__':
     main()
