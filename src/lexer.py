@@ -1,5 +1,5 @@
 '''Lexical analyzer (also known as scanner or tokenizer)'''
-from src.token import Token, RESERVED_KEYWORDS
+from src.Token import Token, RESERVED_KEYWORDS
 #from src.Interpreter import Interpreter
 
 class Lexer(object):
@@ -159,7 +159,7 @@ def runmain():
             break
         if not text:
             continue
-        interpret = interpreter(text)
+        interpret = Interpreter(text)
         result = interpret.interpret()
         print(result)
 

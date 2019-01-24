@@ -1,13 +1,13 @@
-from src.ast import AST, Assign, BinOp, Compound, NoOp, Num, UnaryOp, Var
-from src.lexer import Lexer
-from src.token import Token
+from src.Ast import AST, Assign, BinOp, Block, Compound, NoOp, Num, UnaryOp, Var, VarDecl
+from src.Lexer import Lexer
+from src.Token import Token
 
 
 class Parser(object):
     
     def __init__(self, lexer):
         self.lexer = lexer
-        self.current_token = self.lexer.get_next_token() # set current token to first token from the input
+        self.current_token = self.lexer.get_next_token() # first token from input
 
     def error(self, msg):
         raise ValueError(f'Invalid syntax : {msg}')    
@@ -24,11 +24,67 @@ class Parser(object):
             self.error(f'Unknown token type : {token_type}')
 
     def program(self):
-        """program : compound_statement DOT"""
-        node = self.compound_statement()
+        """program : PROGRAM variable SEMI block DOT"""
+        self.match(Token.PROGRAM)
+        var_node = self.variable()
+        prog_name = var_node.value
+        self.match(Token.SEMI)
+        block_node = self.block()
+        program_node = Program(prog_name, block_node)
         self.match(Token.DOT)
+        return program_node
+
+    def block(self):
+        """block : declarations compound_statement"""
+        declaration_nodes = self.declarations()
+        compound_statement_node = self.compound_statement()
+        node = Block(declaration_nodes, compound_statement_node)
         return node
 
+    def declarations(self):
+        """declarations : VAR (variable_declaration SEMI)+
+                        | empty
+        """
+        declarations = []
+        if self.current_token.type == Token.VAR:
+            self.match(Token.VAR)
+            while self.current_token.type == Token.ID:
+                var_decl = self.variable_declaration()
+                declarations.extend(var_decl)
+                self.eat(Token.SEMI)
+
+        return declarations
+
+    def variable_declaration(self):
+        """variable_declaration : ID (COMMA ID)* COLON type_spec"""
+        var_nodes = [Var(self.current_token)]  # first ID
+        self.match(Token.ID)
+
+        while self.current_token.type == Token.COMMA:
+            self.match(Token.COMMA)
+            var_nodes.append(Var(self.current_token))
+            self.match(Token.ID)
+
+        self.match(Token.COLON)
+
+        type_node = self.type_spec()
+        var_declarations = [
+            VarDecl(var_node, type_node)
+            for var_node in var_nodes
+        ]
+        return var_declarations
+
+    def type_spec(self):
+        """type_spec : INTEGER
+                     | REAL
+        """
+        token = self.current_token
+        if self.current_token.type == Token.INTEGER:
+            self.match(Token.INTEGER)
+        else:
+            self.match(Token.REAL)
+        node = Type(token)
+        return node
 
     def compound_statement(self):
         """
@@ -56,9 +112,6 @@ class Parser(object):
         while self.current_token.type == Token.SEMI:
             self.match(Token.SEMI)
             results.append(self.statement())
-
-        if self.current_token.type == Token.ID:
-            self.error('statement SEMI statement_list')
 
         return results
 
@@ -102,11 +155,9 @@ class Parser(object):
 
     def expr(self):
         """
-        #9
+        #9,10
         expr : term ((PLUS | MINUS) term)*
         """
-        # set current token to the first token taken from the input
-        # not in #6 - self.current_token = self.get_next_token() 
 
         node = self.term()
 
@@ -124,8 +175,8 @@ class Parser(object):
     
     def term(self ):
         ''' 
-        #9
-        term : factor ((MUL | DIV) factor)*
+        # 10
+        term : factor ((MUL | INTEGER_DIV | FLOAT_DIV) factor)*
         '''
 
         node = self.factor()
@@ -134,8 +185,10 @@ class Parser(object):
             token = self.current_token
             if token.type == Token.MUL:
                 self.match(Token.MUL)
-            elif token.type == Token.DIV:
+            elif token.type == Token.INTEGER_DIV:
                 self.match(Token.DIV)
+            elif token.type == Token.FLOAT_DIV:
+                self.match(Token.FLOAT_DIV)
 
             node = BinOp(left=node, op=token, right=self.factor())
 
@@ -162,8 +215,12 @@ class Parser(object):
             node = UnaryOp(token, self.factor())
             return node
 
-        elif token.type == Token.INTEGER:
-            self.match(Token.INTEGER)
+        elif token.type == Token.INTEGER_CONST:
+            self.match(Token.INTEGER_CONST)
+            return Num(token)
+
+        elif token.type == Token.REAL_CONST:
+            self.match(Token.REAL_CONST)
             return Num(token)
 
         elif token.type == Token.LPAREN:
@@ -178,7 +235,12 @@ class Parser(object):
 
     def parse(self):
         """
-        program : compound_statement DOT
+        program : PROGRAM variable SEMI block DOT
+        block : declarations compound_statement
+        declarations : VAR (variable_declaration SEMI)+
+                     | empty
+        variable_declaration : ID (COMMA ID)* COLON type_spec
+        type_spec : INTEGER
         compound_statement : BEGIN statement_list END
         statement_list : statement
                        | statement SEMI statement_list
@@ -187,17 +249,18 @@ class Parser(object):
                   | empty
         assignment_statement : variable ASSIGN expr
         empty :
-        expr: term ((PLUS | MINUS) term)*
-        term: factor ((MUL | DIV) factor)*
+        expr : term ((PLUS | MINUS) term)*
+        term : factor ((MUL | INTEGER_DIV | FLOAT_DIV) factor)*
         factor : PLUS factor
                | MINUS factor
-               | INTEGER
+               | INTEGER_CONST
+               | REAL_CONST
                | LPAREN expr RPAREN
                | variable
         variable: ID
         """
         node = self.program()
         if self.current_token.type != Token.EOF:
-            self.error('Missing EOF')
+            self.error()
 
         return node

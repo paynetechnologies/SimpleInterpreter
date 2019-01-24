@@ -1,6 +1,6 @@
-from src.token import Token, RESERVED_KEYWORDS
-from src.lexer import Lexer
-from src.parser import Parser
+from src.Token import Token, RESERVED_KEYWORDS
+from src.Lexer import Lexer
+from src.Parser import Parser
 
 class NodeVisitor(object):
     
@@ -13,26 +13,41 @@ class NodeVisitor(object):
         raise Exception('No visit_{} method'.format(type(node).__name__))
 
 class Interpreter(NodeVisitor):
-
-    GLOBAL_SCOPE = {}
-
     def __init__(self, parser):
         self.parser = parser
+        import collections
+        self.GLOBAL_SCOPE = collections.OrderedDict()
+
+    def visit_Program(self, node):
+        self.visit(node.block)
+
+    def visit_Block(self, node):
+        for declaration in node.declarations:
+            self.visit(declaration)
+        self.visit(node.compound_statement)
+
+    def visit_VarDecl(self, node):
+        # Do nothing
+        pass
+
+    def visit_Type(self, node):
+        # Do nothing
+        pass
 
     def visit_BinOp(self, node):
-        if node.op.type == Token.PLUS:
+        if node.op.type == PLUS:
             return self.visit(node.left) + self.visit(node.right)
-        elif node.op.type == Token.MINUS:
+        elif node.op.type == MINUS:
             return self.visit(node.left) - self.visit(node.right)
-        elif node.op.type == Token.MUL:
+        elif node.op.type == MUL:
             return self.visit(node.left) * self.visit(node.right)
-        elif node.op.type == Token.DIV:
-            return self.visit(node.left) / self.visit(node.right)
-
+        elif node.op.type == INTEGER_DIV:
+            return self.visit(node.left) // self.visit(node.right)
+        elif node.op.type == FLOAT_DIV:
+            return float(self.visit(node.left)) / float(self.visit(node.right))
 
     def visit_Num(self, node):
         return node.value
-
 
     def visit_UnaryOp(self, node):
         op = node.op.type
@@ -40,7 +55,6 @@ class Interpreter(NodeVisitor):
             return +self.visit(node.expr)
         elif op == Token.MINUS:
             return -self.visit(node.expr)
-
 
     def visit_Compound(self, node):
         for child in node.children:
@@ -61,7 +75,6 @@ class Interpreter(NodeVisitor):
     def visit_NoOp(self, node):
         pass
 
-
     def interpret(self):
         tree = self.parser.parse()
         if tree is None:
@@ -70,7 +83,7 @@ class Interpreter(NodeVisitor):
 
 
 def main():
-    text = open('src/test/pascal.txt', 'r').read()
+    text = open('src/test/pascal_10.txt', 'r').read()
 
     #import sys
     #while True:
@@ -86,20 +99,8 @@ def main():
     parser = Parser(lexer)
     interpreter = Interpreter(parser)
     result = interpreter.interpret()
-    print(interpreter.GLOBAL_SCOPE)          
+    for k, v in sorted(interpreter.GLOBAL_SCOPE.items()):
+        print('%s = %s' % (k, v))       
 
 if __name__ == '__main__':
     main()
-
-
-'''
-$ python spi.py
-spi> - 3
--3
-spi> + 3
-3
-spi> 5 - - - + - 3
-8
-spi> 5 - - - + - (3 + 4) - +2
-10
-'''    
