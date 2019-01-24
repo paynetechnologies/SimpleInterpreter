@@ -181,12 +181,12 @@ class Parser(object):
 
         node = self.factor()
 
-        while self.current_token.type in (Token.MUL, Token.DIV):
+        while self.current_token.type in (Token.MUL, Token.INTEGER_DIV, Token.FLOAT_DIV):
             token = self.current_token
             if token.type == Token.MUL:
                 self.match(Token.MUL)
             elif token.type == Token.INTEGER_DIV:
-                self.match(Token.DIV)
+                self.match(Token.INTEGER_DIV)
             elif token.type == Token.FLOAT_DIV:
                 self.match(Token.FLOAT_DIV)
 
