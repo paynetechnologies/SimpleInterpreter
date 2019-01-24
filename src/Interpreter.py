@@ -70,22 +70,23 @@ class Interpreter(NodeVisitor):
 
 
 def main():
-    #import sys
-    while True:
-        try:
-            #text = input('spi> ')
-            #text = open(sys.argv[1], 'r').read()
-            text = open('src/test/pascal.txt', 'r').read()
-        except EOFError:
-            break
-        if not text:
-            continue
+    text = open('src/test/pascal.txt', 'r').read()
 
-        lexer = Lexer(text)
-        parser = Parser(lexer)
-        interpreter = Interpreter(parser)
-        result = interpreter.interpret()
-    print(interpreter.GLOBAL_SCOPE)        
+    #import sys
+    #while True:
+    #try:
+        #text = input('spi> ')
+        #text = open(sys.argv[1], 'r').read()
+    # except EOFError:
+    #     break
+    # if not text:
+    #     continue    
+
+    lexer = Lexer(text)
+    parser = Parser(lexer)
+    interpreter = Interpreter(parser)
+    result = interpreter.interpret()
+    print(interpreter.GLOBAL_SCOPE)          
 
 if __name__ == '__main__':
     main()

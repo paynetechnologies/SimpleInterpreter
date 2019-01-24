@@ -12,7 +12,7 @@ class Lexer(object):
         self.current_char = self.text[self.pos]
 
     def error(self, msg):
-        raise Exception('Error parsing input : ' + msg)
+        raise ValueError(f'Error parsing input : {msg}')
 
     def advance(self):
         """Advance the 'pos' pointer and set the 'current_char' variable."""
@@ -53,36 +53,75 @@ class Lexer(object):
         token = RESERVED_KEYWORDS.get(result, Token(Token.ID, result))
         return token
 
+
+    def number(self):
+        """Return a (multidigit) integer or float consumed from the input."""
+        result = ''
+        while self.current_char is not None and self.current_char.isdigit():
+            result += self.current_char
+            self.advance()
+
+        if self.current_char == '.':
+            result += self.current_char
+            self.advance()
+
+            while (self.current_char is not None and self.current_char.isdigit()):
+                result += self.current_char
+                self.advance()
+
+            token = Token('REAL_CONST', float(result))
+        else:
+            token = Token('INTEGER_CONST', int(result))
+
+        return token
+
     def get_next_token(self):
         """
         This method is responsible for breaking a sentence
         apart into tokens. One token at a time.
         """
         while self.current_char is not None:
-
+            # space
             if self.current_char.isspace():
                 self.skip_whitespace()
                 continue
 
+            # Pascal Comment
+            if self.current_char == '{':
+                self.advance()
+                self.skip_comment()
+                continue                
+
+            # alpha
             if self.current_char.isalpha():
                 return self._id()
 
+            # digit
             if self.current_char.isdigit():
                 return Token(Token.INTEGER, self.integer())
 
+            # Pascal assign op
             if self.current_char == ':' and self.peek() == '=':
                 self.advance()
                 self.advance()
                 return Token(Token.ASSIGN, ':=')
 
+            # Semi
             if self.current_char == ';':
                 self.advance()
                 return Token(Token.SEMI, ';')
 
+            # Comma
+            if self.current_char == ',':
+                self.advance()
+                return Token(Token.COMMA, ',')
+         
+            # Plus
             if self.current_char == '+':
                 self.advance()
                 return Token(Token.PLUS, '+')
 
+            # Minus
             if self.current_char == '-':
                 self.advance()
                 return Token(Token.MINUS, '-')
@@ -93,7 +132,7 @@ class Lexer(object):
 
             if self.current_char == '/':
                 self.advance()
-                return Token(Token.DIV, '/')
+                return Token(Token.FLOAT_DIV, '/')
 
             if self.current_char == '(':
                 self.advance()
@@ -120,8 +159,8 @@ def runmain():
             break
         if not text:
             continue
-        interpreter = Interpreter(text)
-        result = interpreter.interpret()
+        interpret = interpreter(text)
+        result = interpret.interpret()
         print(result)
 
 if __name__ == '__main__':

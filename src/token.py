@@ -4,11 +4,15 @@ class Token():
     Token 
     '''
     # Token types
-    # EOF (end-of-file) token is used to indicate that
-    # there is no more input left for lexical analysis       
-    (ASSIGN, BEGIN, DIV, DOT, END, EOF, ID, INTEGER, LPAREN, MINUS, MUL, PLUS, RPAREN, SEMI) = ( \
-        'ASSIGN', 'BEGIN', 'DIV', 'DOT', 'END', 'EOF', 'ID', 'INTEGER', 'LPAREN', \
-        'MINUS', 'MUL', 'PLUS', 'RPAREN', 'SEMI') 
+    (
+        ASSIGN, BEGIN, COLON, COMMA, DIV, DOT, END, FLOAT_DIV, 
+        EOF, ID, INTEGER, INTEGER_CONST, INTEGER_DIV, LPAREN, 
+        MINUS, MUL, PLUS, PROGRAM,  REAL, REAL_CONST, RPAREN, SEMI, VAR
+    ) = ( 
+        'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'FLOAD_DIV', \
+        'EOF', 'ID', 'INTEGER', 'INTEGER_CONST', 'INTEGER_DIV', 'LPAREN', \
+        'MINUS', 'MUL', 'PLUS', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 'VAR'
+    ) 
 
 
     def __init__(self, type, value):
@@ -32,10 +36,20 @@ class Token():
         return self.__str__()
 
 
+# RESERVED_KEYWORDS = {
+#     'BEGIN': Token(Token.BEGIN, Token.BEGIN),
+#     'END': Token(Token.END, Token.END),
+#     }
+
 RESERVED_KEYWORDS = {
-    'BEGIN': Token(Token.BEGIN, Token.BEGIN),
-    'END': Token(Token.END, Token.END),
-    }
+    'PROGRAM': Token('PROGRAM', 'PROGRAM'),
+    'VAR': Token('VAR', 'VAR'),
+    'DIV': Token('INTEGER_DIV', 'DIV'),
+    'INTEGER': Token('INTEGER', 'INTEGER'),
+    'REAL': Token('REAL', 'REAL'),
+    'BEGIN': Token('BEGIN', 'BEGIN'),
+    'END': Token('END', 'END'),
+}
 
 if __name__ == '__main__':
     #t = Token(Token.INTEGER, Token.INTEGER)
