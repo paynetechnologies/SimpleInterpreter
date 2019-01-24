@@ -1,6 +1,6 @@
 import unittest
 
-'''
+
 class LexerTestCase(unittest.TestCase):
     def makeLexer(self, text):
         from src.Lexer import Lexer
@@ -35,7 +35,7 @@ class LexerTestCase(unittest.TestCase):
             token = lexer.get_next_token()
             self.assertEqual(token.type, tok_type)
             self.assertEqual(token.value, tok_val)
-'''
+
 
 class InterpreterTestCase(unittest.TestCase):
     
@@ -50,18 +50,18 @@ class InterpreterTestCase(unittest.TestCase):
     
     def test_02_integer_arithmetic_expressions(self):
         for expr, result in (
-            ( '8 DIV 4', 2),
-            # ('3', 3),
-            # ('2 + 7 * 4', 30),
-            # ('7 - 8 DIV 4', 5),
-            # ('14 + 2 * 3 - 6 DIV 2', 17),
-            # ('7 + 3 * (10 DIV (12 DIV (3 + 1) - 1))', 22),
-            # ('7 + 3 * (10 DIV (12 DIV (3 + 1) - 1)) DIV (2 + 3) - 5 - 3 + (8)', 10),
-            # ('7 + (((3 + 2)))', 12),
-            # ('- 3', -3),
-            # ('+ 3', 3),
-            # ('5 - - - + - 3', 8),
-            # ('5 - - - + - (3 + 4) - +2', 10),
+            ('8 DIV 4', 2),
+            ('3', 3),
+            ('2 + 7 * 4', 30),
+            ('7 - 8 DIV 4', 5),
+            ('14 + 2 * 3 - 6 DIV 2', 17),
+            ('7 + 3 * (10 DIV (12 DIV (3 + 1) - 1))', 22),
+            ('7 + 3 * (10 DIV (12 DIV (3 + 1) - 1)) DIV (2 + 3) - 5 - 3 + (8)', 10),
+            ('7 + (((3 + 2)))', 12),
+            ('- 3', -3),
+            ('+ 3', 3),
+            ('5 - - - + - 3', 8),
+            ('5 - - - + - (3 + 4) - +2', 10),
         ):
             interpreter = self.makeInterpreter(
                 """PROGRAM Test;
@@ -75,7 +75,7 @@ class InterpreterTestCase(unittest.TestCase):
             interpreter.interpret()
             globals = interpreter.GLOBAL_SCOPE
             self.assertEqual(globals['a'], result)
-'''
+
     def test_03_float_arithmetic_expressions(self):
         for expr, result in (
             ('3.14', 3.14),
@@ -149,7 +149,7 @@ END.  {Part10}
         self.assertEqual(globals['c'], 27)
         self.assertEqual(globals['x'], 11)
         self.assertAlmostEqual(globals['y'], float(20) / 7 + 3.14)  # 5.9971...
-'''
+
 
 if __name__ == '__main__':
     unittest.main()
