@@ -1,4 +1,4 @@
-from src.Ast import AST, Assign, BinOp, Block, Compound, NoOp, Num, UnaryOp, Var, VarDecl
+from src.Ast import AST, Assign, BinOp, Block, Compound, NoOp, Num, Program, Type, UnaryOp, Var, VarDecl
 from src.Lexer import Lexer
 from src.Token import Token
 
@@ -51,7 +51,7 @@ class Parser(object):
             while self.current_token.type == Token.ID:
                 var_decl = self.variable_declaration()
                 declarations.extend(var_decl)
-                self.eat(Token.SEMI)
+                self.match(Token.SEMI)
 
         return declarations
 

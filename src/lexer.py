@@ -34,6 +34,11 @@ class Lexer(object):
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
 
+    def skip_comment(self):
+        while self.current_char != '}':
+            self.advance()
+        self.advance()  # the closing curly brace
+
 
     def integer(self):
         """Return a (multidigit) integer consumed from the input."""
@@ -98,8 +103,8 @@ class Lexer(object):
 
             # digit
             if self.current_char.isdigit():
-                return Token(Token.INTEGER, self.integer())
-
+                return self.number()
+                
             # Pascal assign op
             if self.current_char == ':' and self.peek() == '=':
                 self.advance()
@@ -110,6 +115,11 @@ class Lexer(object):
             if self.current_char == ';':
                 self.advance()
                 return Token(Token.SEMI, ';')
+
+            # colon
+            if self.current_char == ':':
+                self.advance()
+                return Token(Token.COLON, ':')
 
             # Comma
             if self.current_char == ',':
@@ -146,7 +156,7 @@ class Lexer(object):
                 self.advance()
                 return Token(Token.DOT, '.')                  
 
-            self.error('get_next_token - unknown char')
+            self.error(f'get_next_token - unknown char : {self.current_char}')
 
         return Token(Token.EOF, None)
 

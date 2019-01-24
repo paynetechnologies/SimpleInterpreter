@@ -35,6 +35,11 @@ class Num(AST):
         self.token = token
         self.value = token.value
         
+class Program(AST):
+    def __init__(self, name, block):
+        self.name = name
+        self.block = block
+        
 class Type(AST):
     def __init__(self, token):
         self.token = token
