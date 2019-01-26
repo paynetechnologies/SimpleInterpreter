@@ -1,40 +1,43 @@
+import collections
 from src.Token import Token, RESERVED_KEYWORDS
 from src.Lexer import Lexer
 from src.Parser import Parser
+from src.NodeVisitor import NodeVisitor
+from src.SymbolTable import Symbol, SymbolTable, SymbolTableBuilder, BuiltinTypeSymbol, VarSymbol
 
-class NodeVisitor(object):
-    
-    def visit(self, node):
-        method_name = 'visit_' + type(node).__name__
-        visitor = getattr(self, method_name, self.generic_visit)
-        return visitor(node)
 
-    def generic_visit(self, node):
-        raise Exception('No visit_{} method'.format(type(node).__name__))
+d = False        
+def dprint(msg):
+    if d:
+        print(msg)
 
 class Interpreter(NodeVisitor):
-    def __init__(self, parser):
-        self.parser = parser
-        import collections
+    def __init__(self, tree):
+        self.tree = tree
         self.GLOBAL_SCOPE = collections.OrderedDict()
 
     def visit_Program(self, node):
+        dprint(f'visit_Program : {node}')
         self.visit(node.block)
 
     def visit_Block(self, node):
+        dprint(f'visit_Block : {node}')
         for declaration in node.declarations:
             self.visit(declaration)
         self.visit(node.compound_statement)
 
     def visit_VarDecl(self, node):
+        dprint(f'visit_VarDecl : {node}')
         # Do nothing
         pass
 
     def visit_Type(self, node):
+        dprint(f'visit_Type : {node}')
         # Do nothing
         pass
 
     def visit_BinOp(self, node):
+        dprint(f'visit_BinOp : {node}')
         if node.op.type == Token.PLUS:
             return self.visit(node.left) + self.visit(node.right)
         elif node.op.type == Token.MINUS:
@@ -47,9 +50,11 @@ class Interpreter(NodeVisitor):
             return float(self.visit(node.left)) / float(self.visit(node.right))
 
     def visit_Num(self, node):
+        dprint(f'visit_Num : {node}')
         return node.value
 
     def visit_UnaryOp(self, node):
+        dprint(f'visit_UnaryOp : {node}')
         op = node.op.type
         if op == Token.PLUS:
             return +self.visit(node.expr)
@@ -57,26 +62,30 @@ class Interpreter(NodeVisitor):
             return -self.visit(node.expr)
 
     def visit_Compound(self, node):
+        dprint(f'visit_Compound : {node}')
         for child in node.children:
             self.visit(child)
 
     def visit_Assign(self, node):
+        dprint(f'visit_Assign : {node}')
         var_name = node.left.value
         self.GLOBAL_SCOPE[var_name] = self.visit(node.right)
 
     def visit_Var(self, node):
+        dprint(f'visit_Var : {node}')
         var_name = node.value
-        val = self.GLOBAL_SCOPE.get(var_name)
-        if val is None:
+        var_val = self.GLOBAL_SCOPE.get(var_name)
+        if var_val is None:
             raise NameError(repr(var_name))
         else:
-            return val
+            return var_val
 
     def visit_NoOp(self, node):
+        dprint(f'visit_Nop : {node}')
         pass
 
     def interpret(self):
-        tree = self.parser.parse()
+        tree = self.tree
         if tree is None:
             return ''
         return self.visit(tree)
@@ -97,10 +106,22 @@ def main():
 
     lexer = Lexer(text)
     parser = Parser(lexer)
-    interpreter = Interpreter(parser)
+    tree = parser.parse()
+
+    symtab_builder = SymbolTableBuilder()
+    symtab_builder.visit(tree)
+    print('')
+    print('Symbol Table contents:')
+    print(symtab_builder.symtab)
+
+    interpreter = Interpreter(tree)
     result = interpreter.interpret()
+
+    print('')
+    print('Run-time GLOBAL_MEMORY contents:')
     for k, v in sorted(interpreter.GLOBAL_SCOPE.items()):
-        print('%s = %s' % (k, v))       
+        print(f'{k} = {v}')
+        #print('%s = %s' % (k, v))       
 
 if __name__ == '__main__':
     main()

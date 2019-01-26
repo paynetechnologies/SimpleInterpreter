@@ -1,6 +1,6 @@
-from src.Ast import AST, Assign, BinOp, Block, Compound, NoOp, Num, Program, Type, UnaryOp, Var, VarDecl
-from src.Lexer import Lexer
-from src.Token import Token
+from Ast import AST, Assign, BinOp, Block, Compound, NoOp, Num, Program, Type, UnaryOp, Var, VarDecl
+from Lexer import Lexer
+from Token import Token
 
 
 class Parser(object):
@@ -261,6 +261,6 @@ class Parser(object):
         """
         node = self.program()
         if self.current_token.type != Token.EOF:
-            self.error()
+            self.error('??? Missing EOF Token')
 
         return node

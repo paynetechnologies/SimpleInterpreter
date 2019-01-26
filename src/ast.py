@@ -1,4 +1,4 @@
-from src.Token import Token
+from Token import Token
 
 class AST(object):
     pass
