@@ -4,7 +4,7 @@
 #                                                                             #
 ###############################################################################
 
-import collections
+from collections import OrderedDict
 from src.NodeVisitor import NodeVisitor
 
 class Symbol(object):
@@ -15,7 +15,8 @@ class Symbol(object):
 
 class VarSymbol(Symbol):
     def __init__(self, name, type):
-        super(VarSymbol, self).__init__(name, type)
+        #super(VarSymbol, self).__init__(name, type)
+        super().__init__(name, type)
 
     def __str__(self):
         return '<{name}:{type}>'.format(name=self.name, type=self.type)
@@ -25,7 +26,8 @@ class VarSymbol(Symbol):
 
 class BuiltinTypeSymbol(Symbol):
     def __init__(self, name):
-        super(BuiltinTypeSymbol, self).__init__(name)
+        #super(BuiltinTypeSymbol, self).__init__(name)
+        super().__init__(name)
 
     def __str__(self):
         return self.name
@@ -35,7 +37,7 @@ class BuiltinTypeSymbol(Symbol):
 
 class SymbolTable(object):
     def __init__(self):
-        self._symbols = collections.OrderedDict()
+        self._symbols = OrderedDict()
         self._init_builtins()
 
     def _init_builtins(self):

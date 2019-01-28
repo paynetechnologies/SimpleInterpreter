@@ -14,7 +14,7 @@ def dprint(msg):
 class Interpreter(NodeVisitor):
     def __init__(self, tree):
         self.tree = tree
-        self.GLOBAL_SCOPE = collections.OrderedDict()
+        self.GLOBAL_MEMORY = collections.OrderedDict()
 
     def visit_Program(self, node):
         dprint(f'visit_Program : {node}')
@@ -69,12 +69,12 @@ class Interpreter(NodeVisitor):
     def visit_Assign(self, node):
         dprint(f'visit_Assign : {node}')
         var_name = node.left.value
-        self.GLOBAL_SCOPE[var_name] = self.visit(node.right)
+        self.GLOBAL_MEMORY[var_name] = self.visit(node.right)
 
     def visit_Var(self, node):
         dprint(f'visit_Var : {node}')
         var_name = node.value
-        var_val = self.GLOBAL_SCOPE.get(var_name)
+        var_val = self.GLOBAL_MEMORY.get(var_name)
         if var_val is None:
             raise NameError(repr(var_name))
         else:
