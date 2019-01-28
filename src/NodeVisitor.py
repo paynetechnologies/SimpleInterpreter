@@ -1,8 +1,13 @@
-
-class NodeVisitor(object):
     
+d = False        
+def dprint(msg):
+    if d:
+        print(msg)
+            
+class NodeVisitor(object):
+
     def visit(self, node):
-        print(f'visit : {node}')
+        dprint(f'visit : {node}')
         method_name = 'visit_' + type(node).__name__
         visitor = getattr(self, method_name, self.generic_visit)
         return visitor(node)

@@ -5,3 +5,12 @@ $ python genptdot.py "14 + 2 * 3 - 6 / 2" > parsetree.dot && dot -Tpng -o parset
 
 #python genptdot.py > parsetree.dot && dot -Tpng -o parsetree.png parsetree.dot
 
+    "configurations": [
+        {
+            "name": "Python: Current File (Integrated Terminal)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {"PYTHONPATH":"${workspaceRoot}"},
+        },
