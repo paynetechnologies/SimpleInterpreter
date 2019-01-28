@@ -7,7 +7,9 @@
 import argparse
 import textwrap
 
-from spi import Lexer, Parser, NodeVisitor
+from Lexer import Lexer
+from Parser import Parser
+from Interpreter import NodeVisitor
 
 
 class ASTVisualizer(NodeVisitor):
@@ -146,16 +148,16 @@ class ASTVisualizer(NodeVisitor):
         return ''.join(self.dot_header + self.dot_body + self.dot_footer)
 
 
-def main():
-    argparser = argparse.ArgumentParser(
-        description='Generate an AST DOT file.'
-    )
-    argparser.add_argument(
-        'fname',
-        help='Pascal source file'
-    )
-    args = argparser.parse_args()
-    fname = args.fname
+def main(fname):
+    # argparser = argparse.ArgumentParser(
+    #     description='Generate an AST DOT file.'
+    # )
+    # argparser.add_argument(
+    #     'fname',
+    #     help='Pascal source file'
+    # )
+    # args = argparser.parse_args()
+    # fname = args.fname
     text = open(fname, 'r').read()
 
     lexer = Lexer(text)
@@ -166,4 +168,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main('H:\\repos\\dev\\compilers\\SimpleInterpreter\\src\\test\\pascal_10.txt')

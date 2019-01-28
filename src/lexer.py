@@ -1,5 +1,5 @@
 '''Lexical analyzer (also known as scanner or tokenizer)'''
-from src.Token import Token, RESERVED_KEYWORDS
+from Token import Token, RESERVED_KEYWORDS
 #from src.Interpreter import Interpreter
 
 class Lexer(object):

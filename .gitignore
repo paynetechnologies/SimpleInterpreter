@@ -1,7 +1,7 @@
 bash.exe.stackdump
 pyvenv.cfg
-.vscode/
-settings.json
+# .vscode/ - save these settings
+# settings.json
 
 # Virtualenv related
 bin/
