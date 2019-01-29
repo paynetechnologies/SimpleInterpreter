@@ -1,5 +1,5 @@
 import collections
-from src.Token import Token, RESERVED_KEYWORDS
+from src.Token import Token
 from src.Lexer import Lexer
 from src.Parser import Parser
 from src.NodeVisitor import NodeVisitor
@@ -19,6 +19,9 @@ class Interpreter(NodeVisitor):
     def visit_Program(self, node):
         dprint(f'visit_Program : {node}')
         self.visit(node.block)
+
+    def visit_ProcedureDecl(self, node):
+        pass
 
     def visit_Block(self, node):
         dprint(f'visit_Block : {node}')
@@ -119,7 +122,7 @@ def main():
 
     print('')
     print('Run-time GLOBAL_MEMORY contents:')
-    for k, v in sorted(interpreter.GLOBAL_SCOPE.items()):
+    for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
         print(f'{k} = {v}')
         #print('%s = %s' % (k, v))       
 

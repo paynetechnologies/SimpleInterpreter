@@ -1,4 +1,5 @@
-from src.Ast import AST, Assign, BinOp, Block, Compound, NoOp, Num, Program, Type, UnaryOp, Var, VarDecl
+#from src.Ast import AST, Assign, BinOp, Block, Compound, NoOp, Num, Program, Type, UnaryOp, Var, VarDecl
+from src.Ast import *
 from src.Lexer import Lexer
 from src.Token import Token
 
@@ -43,15 +44,29 @@ class Parser(object):
 
     def declarations(self):
         """declarations : VAR (variable_declaration SEMI)+
+                        | (PROCEDURE ID SEMI block SEMI)*
                         | empty
         """
         declarations = []
+
         if self.current_token.type == Token.VAR:
             self.match(Token.VAR)
+
             while self.current_token.type == Token.ID:
                 var_decl = self.variable_declaration()
                 declarations.extend(var_decl)
                 self.match(Token.SEMI)
+
+        
+        while self.current_token.type == Token.PROCEDURE:
+            self.match(Token.PROCEDURE)
+            proc_name = self.current_token.value
+            self.match(Token.ID)
+            self.match(Token.SEMI)
+            block_node = self.block()
+            proc_decl = ProcedureDecl(proc_name, block_node)
+            declarations.append(proc_decl)
+            self.match(Token.SEMI)
 
         return declarations
 

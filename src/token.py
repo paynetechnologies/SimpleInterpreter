@@ -7,11 +7,11 @@ class Token():
     (
         ASSIGN, BEGIN, COLON, COMMA, DIV, DOT, END, FLOAT_DIV, 
         EOF, ID, INTEGER, INTEGER_CONST, INTEGER_DIV, LPAREN, 
-        MINUS, MUL, PLUS, PROGRAM,  REAL, REAL_CONST, RPAREN, SEMI, VAR
+        MINUS, MUL, PLUS, PROCEDURE, PROGRAM,  REAL, REAL_CONST, RPAREN, SEMI, VAR
     ) = ( 
         'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'FLOAD_DIV', \
         'EOF', 'ID', 'INTEGER', 'INTEGER_CONST', 'INTEGER_DIV', 'LPAREN', \
-        'MINUS', 'MUL', 'PLUS', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 'VAR'
+        'MINUS', 'MUL', 'PLUS', 'PROCEDURE', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 'VAR'
     ) 
 
 
@@ -49,6 +49,7 @@ RESERVED_KEYWORDS = {
     'REAL': Token('REAL', 'REAL'),
     'BEGIN': Token('BEGIN', 'BEGIN'),
     'END': Token('END', 'END'),
+    'PROCEDURE' : Token('PROCEDURE', 'PROCEDURE')
 }
 
 if __name__ == '__main__':

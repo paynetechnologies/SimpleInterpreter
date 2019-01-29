@@ -24,7 +24,8 @@
             "type": "python",
             "request": "launch",
             "module": "enter-your-module-name-here",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "env": {"PYTHONPATH":"${workspaceRoot}"},
         },
         {
             "name": "Python: Django",
@@ -59,7 +60,8 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "externalTerminal"
+            "console": "externalTerminal",
+            "env": {"PYTHONPATH":"${workspaceRoot}"},
         }
     ]
 }
