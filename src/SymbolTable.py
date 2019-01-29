@@ -75,6 +75,10 @@ class SymbolTableBuilder(NodeVisitor):
     def visit_Program(self, node):
         self.visit(node.block)
 
+    def visit_ProcedureDecl(self, node):
+        pass
+
+
     def visit_BinOp(self, node):
         self.visit(node.left)
         self.visit(node.right)

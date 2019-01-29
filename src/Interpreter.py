@@ -21,7 +21,7 @@ class Interpreter(NodeVisitor):
         self.visit(node.block)
 
     def visit_ProcedureDecl(self, node):
-        pass
+        pass #self.visit(node.block_node)
 
     def visit_Block(self, node):
         dprint(f'visit_Block : {node}')
