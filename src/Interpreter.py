@@ -95,7 +95,7 @@ class Interpreter(NodeVisitor):
 
 
 def main():
-    text = open('src/test/pascal_10.txt', 'r').read()
+    text = open('src/test/pascal_13.pas', 'r').read()
 
     #import sys
     #while True:
