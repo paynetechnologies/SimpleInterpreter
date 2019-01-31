@@ -3,61 +3,61 @@ import unittest
 
 class LexerTestCase(unittest.TestCase):
     def makeLexer(self, text):
-        from src.lexer import Lexer
+        from src.Lexer import Lexer
         lexer = Lexer(text)
         return lexer
 
     def test_01_lexer_integer(self):
-        from src.token import Token
+        from src.Token import Token
         lexer = self.makeLexer('234')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, Token.INTEGER)
+        self.assertEqual(token.type, Token.INTEGER_CONST)
         self.assertEqual(token.value, 234)
 
     def test_02_lexer_mul(self):
-        from src.token import Token
+        from src.Token import Token
         lexer = self.makeLexer('*')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.MUL)
         self.assertEqual(token.value, '*')
 
     def test_03_lexer_div(self):
-        from src.token import Token
+        from src.Token import Token
         lexer = self.makeLexer(' / ')
         token = lexer.get_next_token()
-        self.assertEqual(token.type, Token.DIV)
+        self.assertEqual(token.type, Token.FLOAT_DIV)
         self.assertEqual(token.value, '/')
 
     def test_04_lexer_plus(self):
-        from src.token import Token
+        from src.Token import Token
         lexer = self.makeLexer('+')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.PLUS)
         self.assertEqual(token.value, '+')
 
     def test_05_lexer_minus(self):
-        from src.token import Token
+        from src.Token import Token
         lexer = self.makeLexer('-')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.MINUS)
         self.assertEqual(token.value, '-')
 
     def test_06_lexer_lparen(self):
-        from src.token import Token
+        from src.Token import Token
         lexer = self.makeLexer('(')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.LPAREN)
         self.assertEqual(token.value, '(')
 
     def test_07_lexer_rparen(self):
-        from src.token import Token
+        from src.Token import Token
         lexer = self.makeLexer(')')
         token = lexer.get_next_token()
         self.assertEqual(token.type, Token.RPAREN)
         self.assertEqual(token.value, ')')
 
     def test_08_lexer_new_tokens(self):
-        from src.token import Token
+        from src.Token import Token
         #ASSIGN,  DOT, ID, SEMI, BEGIN, END
 
         records = (
@@ -76,9 +76,9 @@ class LexerTestCase(unittest.TestCase):
 
 class InterpreterTestCase(unittest.TestCase):
     def makeInterpreter(self, text):
-        from src.lexer import Lexer
-        from src.parser import Parser
-        from src.interpreter import Interpreter
+        from src.Lexer import Lexer
+        from src.Parser import Parser
+        from src.Interpreter import Interpreter
         lexer = Lexer(text)
         parser = Parser(lexer)
         interpreter = Interpreter(parser)
@@ -100,30 +100,30 @@ class InterpreterTestCase(unittest.TestCase):
         ):
             interpreter = self.makeInterpreter('BEGIN a := %s END.' % expr)
             interpreter.interpret()
-            globals = interpreter.GLOBAL_SCOPE
+            globals = interpreter.GLOBAL_MEMORY
             self.assertEqual(globals['a'], result)
 
-    def test_010_expression_invalid_syntax1(self):
+    def test_10_expression_invalid_syntax1(self):
         interpreter = self.makeInterpreter('10 *')
         with self.assertRaises(Exception):
             interpreter.interpret()
 
-    def test_011_expression_invalid_syntax2(self):
+    def test_11_expression_invalid_syntax2(self):
         interpreter = self.makeInterpreter('1 (1 + 2)')
         with self.assertRaises(Exception):
             interpreter.interpret()
 
-    def test_012_expression_invalid_syntax3(self):
+    def test_12_expression_invalid_syntax3(self):
         interpreter = self.makeInterpreter('BEGIN a := 10 * ; END.')
         with self.assertRaises(Exception):
             interpreter.interpret()
 
-    def test_013_expression_invalid_syntax4(self):
+    def test_13_expression_invalid_syntax4(self):
         interpreter = self.makeInterpreter('BEGIN a := 1 (1 + 2); END.')
         with self.assertRaises(Exception):
             interpreter.interpret()
 
-    def test_014_statements(self):
+    def test_14_statements(self):
         text = """\
 BEGIN
 
@@ -140,7 +140,7 @@ END.
         interpreter = self.makeInterpreter(text)
         interpreter.interpret()
 
-        globals = interpreter.GLOBAL_SCOPE
+        globals = interpreter.GLOBAL_MEMORY
         self.assertEqual(len(globals.keys()), 5)
         self.assertEqual(globals['number'], 2)
         self.assertEqual(globals['a'], 2)

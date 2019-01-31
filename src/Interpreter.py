@@ -3,7 +3,7 @@ from src.Token import Token
 from src.Lexer import Lexer
 from src.Parser import Parser
 from src.NodeVisitor import NodeVisitor
-from src.SymbolTable import Symbol, SymbolTable, SymbolTableBuilder, BuiltinTypeSymbol, VarSymbol
+from src.SymbolTable import Symbol, SymbolTable, SemanticAnalyzer, BuiltinTypeSymbol, VarSymbol
 
 
 d = False        
@@ -19,9 +19,6 @@ class Interpreter(NodeVisitor):
     def visit_Program(self, node):
         dprint(f'visit_Program : {node}')
         self.visit(node.block)
-
-    def visit_ProcedureDecl(self, node):
-        pass #self.visit(node.block_node)
 
     def visit_Block(self, node):
         dprint(f'visit_Block : {node}')
@@ -72,7 +69,8 @@ class Interpreter(NodeVisitor):
     def visit_Assign(self, node):
         dprint(f'visit_Assign : {node}')
         var_name = node.left.value
-        self.GLOBAL_MEMORY[var_name] = self.visit(node.right)
+        var_value = self.visit(node.right)
+        self.GLOBAL_MEMORY[var_name] = var_value
 
     def visit_Var(self, node):
         dprint(f'visit_Var : {node}')
@@ -87,6 +85,9 @@ class Interpreter(NodeVisitor):
         dprint(f'visit_Nop : {node}')
         pass
 
+    def visit_ProcedureDecl(self, node):
+        pass #self.visit(node.block_node)        
+
     def interpret(self):
         tree = self.tree
         if tree is None:
@@ -95,7 +96,11 @@ class Interpreter(NodeVisitor):
 
 
 def main():
-    text = open('src/test/pascal_13.pas', 'r').read()
+    #text = open('src/test/pascal_13.pas', 'r').read()
+    #text = open('src/test/pascal_01_13.pas', 'r').read()
+    #text = open('src/test/pascal_02_13.pas', 'r').read()
+    #text = open('src/test/pascal_03_13.pas', 'r').read()
+    text = open('src/test/pascal_04_13.pas', 'r').read()
 
     #import sys
     #while True:
@@ -111,19 +116,20 @@ def main():
     parser = Parser(lexer)
     tree = parser.parse()
 
-    symtab_builder = SymbolTableBuilder()
-    symtab_builder.visit(tree)
-    print('')
-    print('Symbol Table contents:')
-    print(symtab_builder.symtab)
+    semanticAnalyzer = SemanticAnalyzer()
+    try:
+        semanticAnalyzer.visit(tree)
+    except Exception as e:
+        print(e)
 
-    interpreter = Interpreter(tree)
-    result = interpreter.interpret()
+    print(semanticAnalyzer.symtab)
 
-    print('')
-    print('Run-time GLOBAL_MEMORY contents:')
-    for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
-        print(f'{k} = {v}')
+    # interpreter = Interpreter(tree)
+    # result = interpreter.interpret()
+    # print('')
+    # print('Run-time GLOBAL_MEMORY contents:')
+    # for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
+    #     print(f'{k} = {v}')
         #print('%s = %s' % (k, v))       
 
 if __name__ == '__main__':

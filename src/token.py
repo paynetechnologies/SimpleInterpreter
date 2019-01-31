@@ -9,7 +9,7 @@ class Token():
         EOF, ID, INTEGER, INTEGER_CONST, INTEGER_DIV, LPAREN, 
         MINUS, MUL, PLUS, PROCEDURE, PROGRAM,  REAL, REAL_CONST, RPAREN, SEMI, VAR
     ) = ( 
-        'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'FLOAD_DIV', \
+        'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'FLOATS_DIV', \
         'EOF', 'ID', 'INTEGER', 'INTEGER_CONST', 'INTEGER_DIV', 'LPAREN', \
         'MINUS', 'MUL', 'PLUS', 'PROCEDURE', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 'VAR'
     ) 

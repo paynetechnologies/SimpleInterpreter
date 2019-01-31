@@ -1,0 +1,5 @@
+PROGRAM SymTab1;
+   VAR x, y : INTEGER;
+
+BEGIN
+END.

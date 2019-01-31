@@ -26,17 +26,21 @@ class Parser(object):
 
     def program(self):
         """program : PROGRAM variable SEMI block DOT"""
+
         self.match(Token.PROGRAM)
         var_node = self.variable()
         prog_name = var_node.value
+
         self.match(Token.SEMI)
         block_node = self.block()
         program_node = Program(prog_name, block_node)
+
         self.match(Token.DOT)
         return program_node
 
     def block(self):
         """block : declarations compound_statement"""
+
         declaration_nodes = self.declarations()
         compound_statement_node = self.compound_statement()
         node = Block(declaration_nodes, compound_statement_node)
@@ -50,28 +54,33 @@ class Parser(object):
         declarations = []
 
         if self.current_token.type == Token.VAR:
-            self.match(Token.VAR)
+            while self.current_token.type == Token.VAR:
+                self.match(Token.VAR)
 
-            while self.current_token.type == Token.ID:
-                var_decl = self.variable_declaration()
-                declarations.extend(var_decl)
-                self.match(Token.SEMI)
+                while self.current_token.type == Token.ID:
+                    var_decl = self.variable_declaration()
+                    declarations.extend(var_decl)
+                    self.match(Token.SEMI)
 
         
         while self.current_token.type == Token.PROCEDURE:
             self.match(Token.PROCEDURE)
             proc_name = self.current_token.value
+
             self.match(Token.ID)
             self.match(Token.SEMI)
+
             block_node = self.block()
             proc_decl = ProcedureDecl(proc_name, block_node)
             declarations.append(proc_decl)
+
             self.match(Token.SEMI)
 
         return declarations
 
     def variable_declaration(self):
         """variable_declaration : ID (COMMA ID)* COLON type_spec"""
+
         var_nodes = [Var(self.current_token)]  # first ID
         self.match(Token.ID)
 
@@ -94,10 +103,12 @@ class Parser(object):
                      | REAL
         """
         token = self.current_token
+
         if self.current_token.type == Token.INTEGER:
             self.match(Token.INTEGER)
         else:
             self.match(Token.REAL)
+
         node = Type(token)
         return node
 
