@@ -1,3 +1,4 @@
+'''Parser.py'''
 #from src.Ast import AST, Assign, BinOp, Block, Compound, NoOp, Num, Program, Type, UnaryOp, Var, VarDecl
 from src.Ast import *
 from src.Lexer import Lexer
@@ -47,14 +48,15 @@ class Parser(object):
         return node
 
     def declarations(self):
-        """declarations : VAR (variable_declaration SEMI)+
-                        | (PROCEDURE ID SEMI block SEMI)*
+        """declarations : (VAR (variable_declaration SEMI)+)*
+                        | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
                         | empty
         """
         declarations = []
 
-        if self.current_token.type == Token.VAR:
-            while self.current_token.type == Token.VAR:
+        while True:
+            if self.current_token.type == Token.VAR:
+                #while self.current_token.type == Token.VAR:
                 self.match(Token.VAR)
 
                 while self.current_token.type == Token.ID:
@@ -62,21 +64,66 @@ class Parser(object):
                     declarations.extend(var_decl)
                     self.match(Token.SEMI)
 
-        
-        while self.current_token.type == Token.PROCEDURE:
-            self.match(Token.PROCEDURE)
-            proc_name = self.current_token.value
+        #while self.current_token.type == Token.PROCEDURE:
+            elif self.current_token.type == Token.PROCEDURE:
+                self.match(Token.PROCEDURE)
+                proc_name = self.current_token.value
+                self.match(Token.ID)
 
-            self.match(Token.ID)
-            self.match(Token.SEMI)
+                params = []
 
-            block_node = self.block()
-            proc_decl = ProcedureDecl(proc_name, block_node)
-            declarations.append(proc_decl)
+                if self.current_token.type == Token.LPAREN:
+                    self.match(Token.LPAREN)
+                    params = self.formal_parameter_list()
+                    self.match(Token.RPAREN)
 
-            self.match(Token.SEMI)
+                self.match(Token.SEMI)
+                block_node = self.block()
+                proc_decl = ProcedureDecl(proc_name, params, block_node)
+                declarations.append(proc_decl)
+                self.match(Token.SEMI)
+            else:
+                break
 
         return declarations
+
+    def formal_parameter_list(self):
+        """ formal_parameter_list : formal_parameters
+                              | formal_parameters SEMI formal_parameter_list
+        """
+
+        if not self.current_token.type == Token.ID:
+            return []
+
+        param_nodes = self.formal_parameters()
+
+        while self.current_token.type == Token.SEMI:
+            self.match(Token.SEMI)
+            param_nodes.extend(self.formal_parameters())
+
+        return param_nodes
+
+
+    def formal_parameters(self):
+        """ formal_parameters : ID (COMMA ID)* COLON type_spec """
+        param_nodes = []
+
+        param_tokens = [self.current_token]
+        self.match(Token.ID)
+        while self.current_token.type == Token.COMMA:
+            self.match(Token.COMMA)
+            param_tokens.append(self.current_token)
+            self.match(Token.ID)
+
+        self.match(Token.COLON)
+        type_node = self.type_spec()
+
+        for param_token in param_tokens:
+            parm_node = Param(Var(param_token), type_node)
+            param_nodes.append(parm_node)
+
+        return param_nodes
+
 
     def variable_declaration(self):
         """variable_declaration : ID (COMMA ID)* COLON type_spec"""
@@ -262,37 +309,43 @@ class Parser(object):
 
         block : declarations compound_statement
 
-        declarations : VAR (variable_declaration SEMI)+
-                     | empty
+        declarations : (VAR (variable_declaration SEMI)+)*
+           | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
+           | empty
 
         variable_declaration : ID (COMMA ID)* COLON type_spec
 
+        formal_params_list : formal_parameters
+                           | formal_parameters SEMI formal_parameter_list
+
+        formal_parameters : ID (COMMA ID)* COLON type_spec
+
         type_spec : INTEGER
-
+        
         compound_statement : BEGIN statement_list END
-
+        
         statement_list : statement
                        | statement SEMI statement_list
-                       
+        
         statement : compound_statement
                   | assignment_statement
                   | empty
-
+        
         assignment_statement : variable ASSIGN expr
-
+        
         empty :
-
+        
         expr : term ((PLUS | MINUS) term)*
-
+        
         term : factor ((MUL | INTEGER_DIV | FLOAT_DIV) factor)*
-
+        
         factor : PLUS factor
                | MINUS factor
                | INTEGER_CONST
                | REAL_CONST
                | LPAREN expr RPAREN
                | variable
-
+        
         variable: ID
         """
         node = self.program()

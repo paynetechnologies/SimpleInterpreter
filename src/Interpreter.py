@@ -1,3 +1,4 @@
+'''Interpreter.py'''
 import collections
 from src.Token import Token
 from src.Lexer import Lexer
@@ -100,7 +101,8 @@ def main():
     #text = open('src/test/pascal_01_13.pas', 'r').read()
     #text = open('src/test/pascal_02_13.pas', 'r').read()
     #text = open('src/test/pascal_03_13.pas', 'r').read()
-    text = open('src/test/pascal_04_13.pas', 'r').read()
+    #text = open('src/test/pascal_04_13.pas', 'r').read()
+    text = open('src/test/pascal_01_14.pas', 'r').read()    
 
     #import sys
     #while True:

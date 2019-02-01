@@ -1,3 +1,4 @@
+'''Lexer.py'''
 '''Lexical analyzer (also known as scanner or tokenizer)'''
 from src.Token import Token, RESERVED_KEYWORDS
 #from src.Interpreter import Interpreter
@@ -55,7 +56,7 @@ class Lexer(object):
             result += self.current_char
             self.advance()
 
-        token = RESERVED_KEYWORDS.get(result, Token(Token.ID, result))
+        token = RESERVED_KEYWORDS.get(result.upper(), Token(Token.ID, result))
         return token
 
 

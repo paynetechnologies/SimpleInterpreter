@@ -1,3 +1,4 @@
+'''Token.py'''
 ''' Token Class '''
 class Token():
     ''' 

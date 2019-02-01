@@ -1,4 +1,4 @@
-    
+'''NodeVisitor.py'''    
 d = False        
 def dprint(msg):
     if d:

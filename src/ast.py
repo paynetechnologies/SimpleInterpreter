@@ -1,3 +1,4 @@
+'''Ast.py '''
 from src.Token import Token
 
 class AST(object):
@@ -34,9 +35,15 @@ class Num(AST):
         self.token = token
         self.value = token.value
 
+class Param(AST):
+    def __init__(self, var_node, type_node):
+        self.var_node = var_node
+        self.type_node = type_node
+
 class ProcedureDecl(AST):
-    def __init__(self, proc_name, block_node):
+    def __init__(self, proc_name, params, block_node):
         self.proc_name = proc_name
+        self.params = params  # a list of Param nodes
         self.block_node = block_node
    
 class Program(AST):
