@@ -5,6 +5,7 @@ from src.Lexer import Lexer
 from src.Token import Token
 
 
+
 class Parser(object):
     
     def __init__(self, lexer):
@@ -103,7 +104,6 @@ class Parser(object):
 
         return param_nodes
 
-
     def formal_parameters(self):
         """ formal_parameters : ID (COMMA ID)* COLON type_spec """
         param_nodes = []
@@ -123,7 +123,6 @@ class Parser(object):
             param_nodes.append(parm_node)
 
         return param_nodes
-
 
     def variable_declaration(self):
         """variable_declaration : ID (COMMA ID)* COLON type_spec"""
@@ -225,7 +224,6 @@ class Parser(object):
         """An empty production"""
         return NoOp()
 
-
     def expr(self):
         """
         expr : term ((PLUS | MINUS) term)*
@@ -243,7 +241,6 @@ class Parser(object):
             node = BinOp(left=node, op=token, right=self.term())
 
         return node
-
     
     def term(self ):
         ''' 
@@ -263,7 +260,6 @@ class Parser(object):
             node = BinOp(left=node, op=token, right=self.factor())
 
         return node
-
 
     def factor(self):
         """factor : PLUS factor
@@ -301,7 +297,6 @@ class Parser(object):
         else:
             node = self.variable()
             return node
-
 
     def parse(self):
         """

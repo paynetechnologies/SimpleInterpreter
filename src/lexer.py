@@ -40,7 +40,6 @@ class Lexer(object):
             self.advance()
         self.advance()  # the closing curly brace
 
-
     def integer(self):
         """Return a (multidigit) integer consumed from the input."""
         result = ''
@@ -58,7 +57,6 @@ class Lexer(object):
 
         token = RESERVED_KEYWORDS.get(result.upper(), Token(Token.ID, result))
         return token
-
 
     def number(self):
         """Return a (multidigit) integer or float consumed from the input."""

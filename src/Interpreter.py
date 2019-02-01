@@ -4,10 +4,10 @@ from src.Token import Token
 from src.Lexer import Lexer
 from src.Parser import Parser
 from src.NodeVisitor import NodeVisitor
-from src.SymbolTable import Symbol, SymbolTable, SemanticAnalyzer, BuiltinTypeSymbol, VarSymbol
+from src.SymbolTable import Symbol, ScopedSymbolTable, SemanticAnalyzer, BuiltinTypeSymbol, VarSymbol
 
 
-d = False        
+d = False      
 def dprint(msg):
     if d:
         print(msg)

@@ -20,8 +20,7 @@ class Block(AST):
     def __init__(self, declarations, compound_statement):
         self.declarations = declarations
         self.compound_statement = compound_statement
-
-
+        
 class Compound(AST):
     """Represents a 'BEGIN ... END' block"""
     def __init__(self):

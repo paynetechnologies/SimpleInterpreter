@@ -8,10 +8,13 @@
 from collections import OrderedDict
 from src.NodeVisitor import NodeVisitor
 
+
+
 class Symbol(object):
     def __init__(self, name, type=None):
         self.name = name
         self.type = type
+
 
 
 class VarSymbol(Symbol):
@@ -30,6 +33,7 @@ class VarSymbol(Symbol):
     __repr__ = __str__
 
 
+
 class BuiltinTypeSymbol(Symbol):
     def __init__(self, name):
         super().__init__(name)
@@ -41,6 +45,8 @@ class BuiltinTypeSymbol(Symbol):
         return f"<{self.__class__.__name__}(name={self.name})>"
         #return "<{class_name}(name='{name}')>".format(
         #   class_name=self.__class__.__name__,name=self.name,)
+
+
 
 class ProcedureSymbol(Symbol):
     def __init__(self, name, params=None):
@@ -56,8 +62,8 @@ class ProcedureSymbol(Symbol):
         #     params=self.params,
         # )
 
-
     __repr__ = __str__
+
 
 
 class ScopedSymbolTable(object):
@@ -94,7 +100,6 @@ class ScopedSymbolTable(object):
 
     __repr__ = __str__
 
-    __repr__ = __str__
 
     def insert(self, symbol):
         print('Insert: %s' % symbol.name)
@@ -114,7 +119,6 @@ class ScopedSymbolTable(object):
         # recursively go up the chain and lookup the name
         if self.enclosing_scope is not None:
             return self.enclosing_scope.lookup(name)
-
 
 
 
@@ -184,8 +188,7 @@ class SemanticAnalyzer(NodeVisitor):
 
         self.current_scope = self.current_scope.enclosing_scope
         print('LEAVE scope: %s' %  proc_name)
-
-   
+ 
     def visit_VarDecl(self, node):
         type_name = node.type_node.value
         type_symbol = self.current_scope.lookup(type_name)
