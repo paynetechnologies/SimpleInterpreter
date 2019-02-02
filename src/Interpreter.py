@@ -102,7 +102,11 @@ def main():
     #text = open('src/test/pascal_02_13.pas', 'r').read()
     #text = open('src/test/pascal_03_13.pas', 'r').read()
     #text = open('src/test/pascal_04_13.pas', 'r').read()
-    text = open('src/test/pascal_01_14.pas', 'r').read()    
+    #text = open('src/test/pascal_01_14.pas', 'r').read()    
+    #text = open('src/test/nested_scope_01_14.pas', 'r').read()    
+    #text = open('src/test/nested_scope_02_14.pas', 'r').read()    
+    #text = open('src/test/nested_scope_03_14.pas', 'r').read()    
+    text = open('src/test/nested_scope_04_14.pas', 'r').read()        
 
     #import sys
     #while True:
@@ -123,8 +127,6 @@ def main():
         semanticAnalyzer.visit(tree)
     except Exception as e:
         print(e)
-
-    print(semanticAnalyzer.symtab)
 
     # interpreter = Interpreter(tree)
     # result = interpreter.interpret()
