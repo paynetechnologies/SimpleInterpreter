@@ -329,7 +329,7 @@ class Parser(object):
 
         declarations : (VAR (variable_declaration SEMI)+)*
            | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
-           | (FUNCTION  ID (LPAREN formal_parameter_list RPAREN : return_type_spec)? SEMI block SEMI)*
+           | (FUNCTION  ID (LPAREN formal_parameter_list RPAREN : type_spec)? SEMI block SEMI)*
            | empty
 
         variable_declaration : ID (COMMA ID)* COLON type_spec
@@ -349,9 +349,16 @@ class Parser(object):
         
         statement : compound_statement
                   | assignment_statement
+                  | if_statement
                   | empty
         
         assignment_statement : variable ASSIGN expr
+
+        if_statment : IF b_expr THEN cs ELSEIF b_expr THEN cs ELSE cs
+
+        b_expr : True | False
+
+        cs : compound_statement
         
         empty :
         
