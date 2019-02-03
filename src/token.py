@@ -6,12 +6,12 @@ class Token():
     '''
     # Token types
     (
-        ASSIGN, BEGIN, COLON, COMMA, DIV, DOT, END, FLOAT_DIV, 
-        EOF, ID, INTEGER, INTEGER_CONST, INTEGER_DIV, LPAREN, 
+        ASSIGN, BEGIN, COLON, COMMA, DIV, DOT, END, EOF, FLOAT_DIV, 
+        FUNCTION, ID, INTEGER, INTEGER_CONST, INTEGER_DIV, LONGINT, LPAREN, 
         MINUS, MUL, PLUS, PROCEDURE, PROGRAM,  REAL, REAL_CONST, RPAREN, SEMI, VAR
     ) = ( 
-        'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'FLOATS_DIV', \
-        'EOF', 'ID', 'INTEGER', 'INTEGER_CONST', 'INTEGER_DIV', 'LPAREN', \
+        'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'EOF', 'FLOATS_DIV', \
+        'FUNCTION', 'ID', 'INTEGER', 'INTEGER_CONST', 'INTEGER_DIV', 'LONGINT', 'LPAREN', \
         'MINUS', 'MUL', 'PLUS', 'PROCEDURE', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 'VAR'
     ) 
 
@@ -46,7 +46,9 @@ RESERVED_KEYWORDS = {
     'PROGRAM': Token('PROGRAM', 'PROGRAM'),
     'VAR': Token('VAR', 'VAR'),
     'DIV': Token('INTEGER_DIV', 'DIV'),
+    'FUNCTION': Token('FUNCTION', 'FUNCTION'),
     'INTEGER': Token('INTEGER', 'INTEGER'),
+    'LONGINT': Token('LONGINT', 'LONGINT'),
     'REAL': Token('REAL', 'REAL'),
     'BEGIN': Token('BEGIN', 'BEGIN'),
     'END': Token('END', 'END'),

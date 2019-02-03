@@ -50,7 +50,6 @@ class BuiltinTypeSymbol(Symbol):
 
 class ProcedureSymbol(Symbol):
     def __init__(self, name, params=None):
-        #super(ProcedureSymbol, self).__init__(name)
         super().__init__(name)        
         # a list of formal parameters
         self.params = params if params is not None else []
@@ -66,7 +65,15 @@ class ProcedureSymbol(Symbol):
 
     __repr__ = __str__
 
+class FunctionSymbol(Symbol):
+    def __init__(self, name, params=None):
+        super().__init__(name)        
+        self.params = params if params is not None else []
 
+    def __str__(self):
+        return(f"<{self.__class__.__name__}(name={self.name}, parameters={self.params})>")
+
+    __repr__ = __str__
 
 class ScopedSymbolTable(object):
     def __init__(self, scope_name, scope_level, enclosing_scope=None):
@@ -191,6 +198,35 @@ class SemanticAnalyzer(NodeVisitor):
         self.current_scope = self.current_scope.enclosing_scope
         print('LEAVE scope: %s' %  proc_name)
  
+    def visit_FunctionDecl(self, node):
+        func_name = node.func_name
+        proc_symbol = FunctionSymbol(func_name)
+        self.current_scope.insert(proc_symbol)
+
+        print('ENTER scope: %s' %  func_name)
+        # Scope for parameters and local variables
+        function_scope = ScopedSymbolTable(
+            scope_name=func_name,
+            scope_level=self.current_scope.scope_level + 1,
+            enclosing_scope=self.current_scope
+            )
+        self.current_scope = function_scope
+
+        # Insert parameters into the function_scope
+        for param in node.params:
+            param_type = self.current_scope.lookup(param.type_node.value)
+            param_name = param.var_node.value
+            var_symbol = VarSymbol(param_name, param_type)
+            self.current_scope.insert(var_symbol)
+            proc_symbol.params.append(var_symbol)
+
+        self.visit(node.block_node)
+
+        print(function_scope)
+
+        self.current_scope = self.current_scope.enclosing_scope
+        print('LEAVE scope: %s' %  func_name)
+
     def visit_VarDecl(self, node):
         type_name = node.type_node.value
         type_symbol = self.current_scope.lookup(type_name)

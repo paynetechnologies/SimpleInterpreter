@@ -51,13 +51,13 @@ class Parser(object):
     def declarations(self):
         """declarations : (VAR (variable_declaration SEMI)+)*
                         | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
+                        | (FUNCTION  ID (LPAREN formal_parameter_list RPAREN : return_type_spec)? SEMI block SEMI)*                        
                         | empty
         """
         declarations = []
 
         while True:
             if self.current_token.type == Token.VAR:
-                #while self.current_token.type == Token.VAR:
                 self.match(Token.VAR)
 
                 while self.current_token.type == Token.ID:
@@ -65,7 +65,6 @@ class Parser(object):
                     declarations.extend(var_decl)
                     self.match(Token.SEMI)
 
-        #while self.current_token.type == Token.PROCEDURE:
             elif self.current_token.type == Token.PROCEDURE:
                 self.match(Token.PROCEDURE)
                 proc_name = self.current_token.value
@@ -83,6 +82,27 @@ class Parser(object):
                 proc_decl = ProcedureDecl(proc_name, params, block_node)
                 declarations.append(proc_decl)
                 self.match(Token.SEMI)
+
+            elif self.current_token.type == Token.FUNCTION:
+                self.match(Token.FUNCTION)
+                func_name = self.current_token.value
+                self.match(Token.ID)
+
+                params = []
+
+                if self.current_token.type == Token.LPAREN:
+                    self.match(Token.LPAREN)
+                    params = self.formal_parameter_list()
+                    self.match(Token.RPAREN)
+
+                self.match(Token.COLON)
+                return_type_node = self.type_spec()
+
+                self.match(Token.SEMI)
+                block_node = self.block()
+                func_decl = FunctionDecl(func_name, params, block_node)
+                declarations.append(func_decl)
+                self.match(Token.SEMI)                
             else:
                 break
 
@@ -146,12 +166,15 @@ class Parser(object):
 
     def type_spec(self):
         """type_spec : INTEGER
+                     | LONGINT
                      | REAL
         """
         token = self.current_token
 
         if self.current_token.type == Token.INTEGER:
             self.match(Token.INTEGER)
+        elif self.current_token.type == Token.LONGINT:
+            self.match(Token.LONGINT)            
         else:
             self.match(Token.REAL)
 
@@ -306,6 +329,7 @@ class Parser(object):
 
         declarations : (VAR (variable_declaration SEMI)+)*
            | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
+           | (FUNCTION  ID (LPAREN formal_parameter_list RPAREN : return_type_spec)? SEMI block SEMI)*
            | empty
 
         variable_declaration : ID (COMMA ID)* COLON type_spec
@@ -315,7 +339,8 @@ class Parser(object):
 
         formal_parameters : ID (COMMA ID)* COLON type_spec
 
-        type_spec : INTEGER
+        type_spec : INTEGER | REAL | LONGINT
+        return_type_spec : STRING | INTEGER | LONGINT | REAL  
         
         compound_statement : BEGIN statement_list END
         

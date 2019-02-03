@@ -25,7 +25,13 @@ class Compound(AST):
     """Represents a 'BEGIN ... END' block"""
     def __init__(self):
         self.children = []
-
+   
+class FunctionDecl(AST):
+    def __init__(self, func_name, params, block_node):
+        self.func_name = func_name
+        self.params = params  # a list of Param nodes
+        self.block_node = block_node
+        
 class NoOp(AST):
     pass        
     
@@ -44,7 +50,7 @@ class ProcedureDecl(AST):
         self.proc_name = proc_name
         self.params = params  # a list of Param nodes
         self.block_node = block_node
-   
+
 class Program(AST):
     def __init__(self, name, block):
         self.name = name

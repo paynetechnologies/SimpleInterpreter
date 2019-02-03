@@ -87,7 +87,10 @@ class Interpreter(NodeVisitor):
         pass
 
     def visit_ProcedureDecl(self, node):
-        pass #self.visit(node.block_node)        
+        pass
+
+    def visit_FunctionDecl(self, node):
+        pass
 
     def interpret(self):
         tree = self.tree
@@ -97,16 +100,17 @@ class Interpreter(NodeVisitor):
 
 
 def main():
-    #text = open('src/test/pascal_13.pas', 'r').read()
-    #text = open('src/test/pascal_01_13.pas', 'r').read()
-    #text = open('src/test/pascal_02_13.pas', 'r').read()
-    #text = open('src/test/pascal_03_13.pas', 'r').read()
-    #text = open('src/test/pascal_04_13.pas', 'r').read()
+    #text = open('src/test/pascal_13.pas', 'r').read()      # Error: Symbol(identifier) not found 'y'
+    #text = open('src/test/pascal_01_13.pas', 'r').read()   # valid program
+    #text = open('src/test/pascal_02_13.pas', 'r').read()   # Duplicate id x found
+    #text = open('src/test/pascal_03_13.pas', 'r').read()   # Error: Symbol(identifier) not found 'z'
+    #text = open('src/test/pascal_04_13.pas', 'r').read()    # Error: Duplicate identifier 'x' found
     #text = open('src/test/pascal_01_14.pas', 'r').read()    
     #text = open('src/test/nested_scope_01_14.pas', 'r').read()    
     #text = open('src/test/nested_scope_02_14.pas', 'r').read()    
     #text = open('src/test/nested_scope_03_14.pas', 'r').read()    
-    text = open('src/test/nested_scope_04_14.pas', 'r').read()        
+    #text = open('src/test/test_14/nested_scope_04_14.pas', 'r').read()
+    text = open('src/test/factorial.pas', 'r').read()
 
     #import sys
     #while True:
