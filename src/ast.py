@@ -7,13 +7,13 @@ class AST(object):
 class Assign(AST):
     def __init__(self, left, op, right):
         self.left = left
-        self.token = self.op = op
+        self.token = self.operand = op
         self.right = right
 
 class BinOp(AST):
     def __init__(self, left, op, right):
         self.left = left
-        self.token = self.op = op
+        self.token = self.operand = op
         self.right = right
 
 class Block(AST):
@@ -63,7 +63,7 @@ class Type(AST):
 
 class UnaryOp(AST):
     def __init__(self, op, expr):
-        self.token = self.op = op
+        self.token = self.operand = op
         self.expr = expr
 
 class Var(AST):
@@ -76,5 +76,3 @@ class VarDecl(AST):
     def __init__(self, var_node, type_node):
         self.var_node = var_node
         self.type_node = type_node
-
-
