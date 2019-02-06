@@ -5,19 +5,27 @@ from src.Token import Token, RESERVED_KEYWORDS
 
 class Lexer(object):
     '''Lexer'''
+    WHITESPACE      = ' \t\r\n'
+    TAB             = '\t'
+    NEWLINE         = '\n'
+    EOF_MARKER      = '$'
 
     def __init__(self, text):
         self.text = text            # client string input, e.g. "3 + 5", "12 - 5", etc
         self.pos = 0                # self.pos is an index into self.text
+        self.line_no = 0
+        self.line_pos = 0
         self.current_token = None   # current token instance
         self.current_char = self.text[self.pos]
+        self.tokens = []
 
     def error(self, msg):
-        raise ValueError(f'Error parsing input : {msg}')
+        raise ValueError(f'Lexer Error parsing input : {msg}')
 
     def advance(self):
         """Advance the 'pos' pointer and set the 'current_char' variable."""
         self.pos += 1
+        self.line_pos += 1
         if self.pos > len(self.text) - 1:
             self.current_char = None  # Indicates end of input
         else:
@@ -32,8 +40,15 @@ class Lexer(object):
 
     def skip_whitespace(self):
         ''' [ \t\n]* '''
-        while self.current_char is not None and self.current_char.isspace():
-            self.advance()
+        # while self.current_char is not None and self.current_char.isspace():
+        #     self.advance()
+        while self.current_char is not None and self.current_char in Lexer.WHITESPACE:
+            if self.current_char in Lexer.NEWLINE:
+                self.line_no += 1
+                self.line_pos = 0
+            elif self.current_char in Lexer.TAB:
+                self.line_pos += 3
+            self.advance()                
 
     def skip_comment(self):
         while self.current_char != '}':
@@ -46,6 +61,8 @@ class Lexer(object):
         while self.current_char is not None and self.current_char.isdigit():
             result += self.current_char
             self.advance()
+        token = Token(Token.INTEGER, result, self.line_no, self.line_pos)
+        self.tokens.append(token)             
         return int(result)
 
     def _id(self):
@@ -54,8 +71,9 @@ class Lexer(object):
         while self.current_char is not None and self.current_char.isalnum():
             result += self.current_char
             self.advance()
-
-        token = RESERVED_KEYWORDS.get(result.upper(), Token(Token.ID, result))
+        
+        token = RESERVED_KEYWORDS.get(result.upper(), Token(Token.ID, result, self.line_no, self.line_pos))
+        self.tokens.append(token)             
         return token
 
     def number(self):
@@ -74,9 +92,12 @@ class Lexer(object):
                 self.advance()
 
             token = Token('REAL_CONST', float(result))
+            token = Token(Token.REAL_CONST, result, self.line_no, self.line_pos)
         else:
             token = Token('INTEGER_CONST', int(result))
-
+            token = Token(Token.INTEGER_CONST, result, self.line_no, self.line_pos)
+        
+        self.tokens.append(token)             
         return token
 
     def get_next_token(self):
@@ -86,7 +107,7 @@ class Lexer(object):
         """
         while self.current_char is not None:
             # space
-            if self.current_char.isspace():
+            if self.current_char in Lexer.WHITESPACE: #.isspace():
                 self.skip_whitespace()
                 continue
 
@@ -108,11 +129,15 @@ class Lexer(object):
             if self.current_char == ':' and self.peek() == '=':
                 self.advance()
                 self.advance()
+                token = Token(Token.ASSIGN, ':=', self.line_no, self.line_pos)
+                self.tokens.append(token)             
                 return Token(Token.ASSIGN, ':=')
 
             # Semi
             if self.current_char == ';':
                 self.advance()
+                token = Token(Token.SEMI, ';', self.line_no, self.line_pos)
+                self.tokens.append(token)             
                 return Token(Token.SEMI, ';')
 
             # colon

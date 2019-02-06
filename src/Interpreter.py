@@ -136,6 +136,8 @@ def main():
     except Exception as e:
         print(e)
 
+    for token in lexer.tokens:
+        print(token) 
     # interpreter = Interpreter(tree)
     # result = interpreter.interpret()
     # print('')

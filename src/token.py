@@ -16,25 +16,36 @@ class Token():
     ) 
 
 
-    def __init__(self, type, value):
-        self.type = type
-        self.value = value         # token value: 0, 1, 2. 3...'+', '-', '*', '/', ID, None
+    # def __init__(self, type, value):
+    #     self.type = type
+    #     self.value = value         # token value: 0, 1, 2. 3...'+', '-', '*', '/', ID, None
 
-    def __str__(self):
-        """String representation of the class instance.
+    # def __str__(self):
+    #     """String representation of the class instance.
 
-        Examples:
-            Token(INTEGER, 3)
-            Token(PLUS '+')
-            Token(MULTIPLY '*')
-        """
-        return 'Token({type}, {value})'.format(
-            type=self.type,
-            value=repr(self.value)
-        )
+    #     Examples:
+    #         Token(INTEGER, 3)
+    #         Token(PLUS '+')
+    #         Token(MULTIPLY '*')
+    #     """
+    #     return 'Token({type}, {value})'.format(
+    #         type=self.type,
+    #         value=repr(self.value)
+    #     )
 
     def __repr__(self):
         return self.__str__()
+
+    def __init__(self, type, value, line_no=0, line_pos=0):        
+        self.type = type
+        self.value = value
+        #self.line = line
+        self.line_no = line_no
+        self.line_pos = line_pos # - len(value)
+        
+    def __str__(self):
+        return '{0}:{1}'.format(self.line_no, self.line_pos).ljust(10) + self.type.ljust(15) + self.value        
+
 
 
 # RESERVED_KEYWORDS = {

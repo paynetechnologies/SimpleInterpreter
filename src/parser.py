@@ -121,7 +121,9 @@ class Parser():
         return NoOp()
 
     def error(self, msg):
-        raise ValueError(f'Invalid syntax : {msg}')    
+        for token in self.lexer.tokens:
+            print(token)        
+        raise ValueError(f'Parser Error Invalid syntax : {msg}')    
 
     def expr(self):
         """
@@ -338,6 +340,9 @@ class Parser():
 
             PROGRAM factorial; 
             BEGIN
+                function factoria(a: integer): longint;
+                begin
+                end;
             END.
 
         block : declarations compound_statement
