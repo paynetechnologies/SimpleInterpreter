@@ -2,7 +2,7 @@
 ''' Token Class '''
 class Token():
     ''' 
-    Token 
+    Token
     '''
     # Token types
     (
@@ -36,15 +36,15 @@ class Token():
     def __repr__(self):
         return self.__str__()
 
-    def __init__(self, type, value, line_no=0, line_pos=0):        
-        self.type = type
+    def __init__(self, _type, value, line_no=0, line_pos=0):        
+        self.type = _type
         self.value = value
         #self.line = line
         self.line_no = line_no
         self.line_pos = line_pos # - len(value)
         
     def __str__(self):
-        return '{0}:{1}'.format(self.line_no, self.line_pos).ljust(10) + self.type.ljust(15) + self.value        
+        return '{0}:{1}'.format(self.line_no, self.line_pos).ljust(10) + self.type.ljust(15) + self.value   
 
 
 
@@ -54,37 +54,18 @@ class Token():
 #     }
 
 RESERVED_KEYWORDS = {
-    'PROGRAM': Token('PROGRAM', 'PROGRAM'),
-    'VAR': Token('VAR', 'VAR'),
+    'BEGIN': Token('BEGIN', 'BEGIN'),
     'DIV': Token('INTEGER_DIV', 'DIV'),
+    'END': Token('END', 'END'),
     'FUNCTION': Token('FUNCTION', 'FUNCTION'),
     'INTEGER': Token('INTEGER', 'INTEGER'),
     'LONGINT': Token('LONGINT', 'LONGINT'),
+    'PROCEDURE' : Token('PROCEDURE', 'PROCEDURE'),
+    'PROGRAM': Token('PROGRAM', 'PROGRAM'),
     'REAL': Token('REAL', 'REAL'),
-    'BEGIN': Token('BEGIN', 'BEGIN'),
-    'END': Token('END', 'END'),
-    'PROCEDURE' : Token('PROCEDURE', 'PROCEDURE')
+    'VAR': Token('VAR', 'VAR'),    
 }
 
 if __name__ == '__main__':
     #t = Token(Token.INTEGER, Token.INTEGER)
     print(Token(Token.INTEGER, Token.INTEGER))
-
-
-    # keywords ::= while | return | if | elif | 
-    # operators ::= +, -, *, /, **
-    # relations ::= >, >=, <, <=, =, <>     
-    # identifiers ::= [A..Za..z]+[0..9_]*
-    # constants ::= pi | 
-    # numbers ::= [0..9]+
-    # punctuation ::= ; 
-    # EOF (end-of-file) token is used to indicate that there is no more input left for lexical analysis
-    
-    # Symbol Table ::= Tokens 
-    # Tokens ::= Token_Types Attributes
-    # Token_Types ::= Keywords, operaors, relations, identifiers, constants, numbers, punctuation
-    # Attributes ::= [Lexeme | Number] Line_Number [ptr to symbol table]
-    # Line_Number ::= size of input / \n
-    # Lexeme ::= ID | NUM
-    # ID ::= [A..Za..z]+[0..9_]*
-    # NUM ::= [0..9]+    

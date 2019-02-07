@@ -1,7 +1,7 @@
-'''Lexer.py'''
-'''Lexical analyzer (also known as scanner or tokenizer)'''
 from src.Token import Token, RESERVED_KEYWORDS
 #from src.Interpreter import Interpreter
+'''Lexer.py'''
+'''Lexical analyzer (also known as scanner or tokenizer)'''
 
 class Lexer(object):
     '''Lexer'''
@@ -13,11 +13,12 @@ class Lexer(object):
     def __init__(self, text):
         self.text = text            # client string input, e.g. "3 + 5", "12 - 5", etc
         self.pos = 0                # self.pos is an index into self.text
-        self.line_no = 0
-        self.line_pos = 0
         self.current_token = None   # current token instance
         self.current_char = self.text[self.pos]
-        self.tokens = []
+
+        self.line_no = 1
+        self.line_pos = 0
+        self.tokens = []            # list of tokens
 
     def error(self, msg):
         raise ValueError(f'Lexer Error parsing input : {msg}')
@@ -26,6 +27,7 @@ class Lexer(object):
         """Advance the 'pos' pointer and set the 'current_char' variable."""
         self.pos += 1
         self.line_pos += 1
+
         if self.pos > len(self.text) - 1:
             self.current_char = None  # Indicates end of input
         else:
@@ -33,6 +35,7 @@ class Lexer(object):
 
     def peek(self):
         peek_pos = self.pos + 1
+
         if peek_pos > len(self.text) - 1:
             return None
         else:
@@ -40,6 +43,7 @@ class Lexer(object):
 
     def skip_whitespace(self):
         ''' [ \t\n]* '''
+
         # while self.current_char is not None and self.current_char.isspace():
         #     self.advance()
         while self.current_char is not None and self.current_char in Lexer.WHITESPACE:
@@ -51,6 +55,7 @@ class Lexer(object):
             self.advance()                
 
     def skip_comment(self):
+        '''Pascal comment '''
         while self.current_char != '}':
             self.advance()
         self.advance()  # the closing curly brace
@@ -78,9 +83,10 @@ class Lexer(object):
 
     def number(self):
         """Return a (multidigit) integer or float consumed from the input."""
-        result = ''
+        result = int(self.current_char) - 0
         while self.current_char is not None and self.current_char.isdigit():
-            result += self.current_char
+            result = result * 10 + int(self.current_char) - 0
+            #result += self.current_char
             self.advance()
 
         if self.current_char == '.':
@@ -88,7 +94,8 @@ class Lexer(object):
             self.advance()
 
             while (self.current_char is not None and self.current_char.isdigit()):
-                result += self.current_char
+                #result += self.current_char
+                result = result * 10 + int(self.current_char) - 0
                 self.advance()
 
             token = Token('REAL_CONST', float(result))
@@ -115,7 +122,7 @@ class Lexer(object):
             if self.current_char == '{':
                 self.advance()
                 self.skip_comment()
-                continue                
+                continue           
 
             # alpha
             if self.current_char.isalpha():
@@ -186,6 +193,7 @@ class Lexer(object):
 
 
 def runmain():
+    from src.Interpreter import Interpreter
     while True:
         try:
             text = input('calc> ')

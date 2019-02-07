@@ -114,18 +114,6 @@ def main():
     #text = open('src/test/test_14/nested_scope_04_14.pas', 'r').read()
     text = open('src/test/test_14/nested_function_01_14.pas', 'r').read()
     
-    
-
-    #import sys
-    #while True:
-    #try:
-        #text = input('spi> ')
-        #text = open(sys.argv[1], 'r').read()
-    # except EOFError:
-    #     break
-    # if not text:
-    #     continue    
-
     lexer = Lexer(text)
     parser = Parser(lexer)
     tree = parser.parse()
@@ -133,8 +121,8 @@ def main():
     semantic_analyzer = SemanticAnalyzer()
     try:
         semantic_analyzer.visit(tree)
-    except Exception as e:
-        print(e)
+    except SystemError as sys_error:
+        print(sys_error)
 
     for token in lexer.tokens:
         print(token) 
