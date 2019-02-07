@@ -1,5 +1,5 @@
 from src.Token import Token, RESERVED_KEYWORDS
-#from src.Interpreter import Interpreter
+
 '''Lexer.py'''
 '''Lexical analyzer (also known as scanner or tokenizer)'''
 
@@ -14,10 +14,10 @@ class Lexer(object):
         self.text = text            # client string input, e.g. "3 + 5", "12 - 5", etc
         self.pos = 0                # self.pos is an index into self.text
         self.current_token = None   # current token instance
-        self.current_char = self.text[self.pos]
+        self.current_char = self.text[self.pos] #init with 1st char
 
         self.line_no = 1
-        self.line_pos = 0
+        self.line_pos = 1
         self.tokens = []            # list of tokens
 
     def error(self, msg):
@@ -49,7 +49,7 @@ class Lexer(object):
         while self.current_char is not None and self.current_char in Lexer.WHITESPACE:
             if self.current_char in Lexer.NEWLINE:
                 self.line_no += 1
-                self.line_pos = 0
+                self.line_pos = 1
             elif self.current_char in Lexer.TAB:
                 self.line_pos += 3
             self.advance()                
@@ -60,15 +60,15 @@ class Lexer(object):
             self.advance()
         self.advance()  # the closing curly brace
 
-    def integer(self):
-        """Return a (multidigit) integer consumed from the input."""
-        result = ''
-        while self.current_char is not None and self.current_char.isdigit():
-            result += self.current_char
-            self.advance()
-        token = Token(Token.INTEGER, result, self.line_no, self.line_pos)
-        self.tokens.append(token)             
-        return int(result)
+    # def integer(self):
+    #     """Return a (multidigit) integer consumed from the input."""
+    #     result = ''
+    #     while self.current_char is not None and self.current_char.isdigit():
+    #         result += self.current_char
+    #         self.advance()
+    #     token = Token(Token.INTEGER, result, self.line_no, self.line_pos)
+    #     self.tokens.append(token)             
+    #     return int(result)
 
     def _id(self):
         """Handle identifiers and reserved keywords"""
@@ -77,7 +77,9 @@ class Lexer(object):
             result += self.current_char
             self.advance()
         
-        token = RESERVED_KEYWORDS.get(result.upper(), Token(Token.ID, result, self.line_no, self.line_pos))
+        token = RESERVED_KEYWORDS.get(result.upper(), None)
+        if token is None:
+            token = Token(Token.ID, result, self.line_no, self.line_pos))
         self.tokens.append(token)             
         return token
 
