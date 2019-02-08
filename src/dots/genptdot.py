@@ -7,9 +7,9 @@
 import argparse
 import textwrap
 
-from Lexer import Lexer
-from Parser import Parser
-from Interpreter import NodeVisitor
+from src.Lexer import Lexer
+from src.Parser import Parser
+from src.Interpreter import NodeVisitor
 
 
 class ASTVisualizer(NodeVisitor):
@@ -168,4 +168,5 @@ def main(fname):
 
 
 if __name__ == '__main__':
-    main('H:\\repos\\dev\\compilers\\SimpleInterpreter\\src\\test\\pascal_10.txt')
+    #main('H:\\repos\\dev\\compilers\\SimpleInterpreter\\src\\test\\pascal_10.txt')
+    main('C:/Users/Howard David Payne/dev/compilers/SimpleInterpreter/src/test/pascal_10.txt')

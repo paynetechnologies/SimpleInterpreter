@@ -127,13 +127,6 @@ def main():
 
     for token in lexer.tokens:
         print(token) 
-    # interpreter = Interpreter(tree)
-    # result = interpreter.interpret()
-    # print('')
-    # print('Run-time GLOBAL_MEMORY contents:')
-    # for k, v in sorted(interpreter.GLOBAL_MEMORY.items()):
-    #     print(f'{k} = {v}')
-        #print('%s = %s' % (k, v))       
 
 if __name__ == '__main__':
     main()

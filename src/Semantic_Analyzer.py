@@ -1,6 +1,7 @@
 from src.NodeVisitor import NodeVisitor
 from src.SymbolTable import ScopedSymbolTable, ProcedureSymbol, VarSymbol, FunctionSymbol
 
+
 class SemanticAnalyzer(NodeVisitor):
     def __init__(self):
         self.current_scope = None
@@ -52,11 +53,14 @@ class SemanticAnalyzer(NodeVisitor):
         self.current_scope = self.current_scope.enclosing_scope
         print('LEAVE scope: %s' %  func_name)
 
+
     def visit_NoOp(self, node):
         pass
 
+
     def visit_Num(self, node):
         return node.value
+
 
     def visit_Program(self, node):
 
@@ -105,6 +109,7 @@ class SemanticAnalyzer(NodeVisitor):
         self.current_scope = self.current_scope.enclosing_scope
         print('LEAVE scope: %s' %  proc_name)
  
+
     def visit_VarDecl(self, node):
         type_name = node.type_node.value
         type_symbol = self.current_scope.lookup(type_name)
@@ -122,6 +127,7 @@ class SemanticAnalyzer(NodeVisitor):
             )
 
         self.current_scope.insert(var_symbol)
+
 
     def visit_Var(self, node):
         var_name = node.value

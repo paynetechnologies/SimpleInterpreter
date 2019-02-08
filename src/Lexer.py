@@ -1,6 +1,4 @@
 from src.Token import Token, RESERVED_KEYWORDS
-
-'''Lexer.py'''
 '''Lexical analyzer (also known as scanner or tokenizer)'''
 
 class Lexer(object):
@@ -12,12 +10,13 @@ class Lexer(object):
 
     def __init__(self, text):
         self.text = text            # client string input, e.g. "3 + 5", "12 - 5", etc
-        self.pos = 0                # self.pos is an index into self.text
         self.current_token = None   # current token instance
-        self.current_char = self.text[self.pos] #init with 1st char
 
         self.line_no = 1
         self.line_pos = 1
+        self.pos = 0                # self.pos is an index into self.text        
+        self.current_char = self.text[self.pos] #init with 1st char
+
         self.tokens = []            # list of tokens
 
     def error(self, msg):
@@ -40,50 +39,6 @@ class Lexer(object):
             return None
         else:
             return self.text[peek_pos]
-
-    def skip_whitespace(self):
-        ''' [ \t\n]* '''
-
-        # while self.current_char is not None and self.current_char.isspace():
-        #     self.advance()
-        while self.current_char is not None and self.current_char in Lexer.WHITESPACE:
-            if self.current_char in Lexer.NEWLINE:
-                self.line_no += 1
-                self.line_pos = 1
-            elif self.current_char in Lexer.TAB:
-                self.line_pos += 3
-            self.advance()                
-
-    def skip_comment(self):
-        '''Pascal comment '''
-        while self.current_char != '}':
-            self.advance()
-        self.advance()  # the closing curly brace
-
-    # def integer(self):
-    #     """Return a (multidigit) integer consumed from the input."""
-    #     result = ''
-    #     while self.current_char is not None and self.current_char.isdigit():
-    #         result += self.current_char
-    #         self.advance()
-    #     token = Token(Token.INTEGER, result, self.line_no, self.line_pos)
-    #     self.tokens.append(token)             
-    #     return int(result)
-
-    def _id(self):
-        """Handle identifiers and reserved keywords"""
-        result = ''
-        while self.current_char is not None and self.current_char.isalnum():
-            result += self.current_char
-            self.advance()
-        
-        reserved_token = RESERVED_KEYWORDS.get(result.upper(), None)
-        if reserved_token:
-            token = Token(reserved_token.type, result, self.line_no, self.line_pos)
-        else:
-            token = Token(Token.ID, result, self.line_no, self.line_pos)
-        self.tokens.append(token)             
-        return token
 
     def number(self):
         """Return a (multidigit) integer or float consumed from the input."""
@@ -111,6 +66,7 @@ class Lexer(object):
         self.tokens.append(token)             
         return token
 
+
     def get_next_token(self):
         """
         This method is responsible for breaking a sentence
@@ -126,7 +82,7 @@ class Lexer(object):
             if self.current_char == '{':
                 self.advance()
                 self.skip_comment()
-                continue           
+                continue       
 
             # alpha
             if self.current_char.isalpha():
@@ -213,15 +169,47 @@ class Lexer(object):
 
             self.error(f'get_next_token - unknown char : {self.current_char}')
 
-        token = Token(Token.EOF, 'EOF',self.line_no, self.line_pos)
+        token = Token(Token.EOF, 'EOF', self.line_no, self.line_pos)
+        return token
+
+    def skip_whitespace(self):
+        ''' [ \t\n]* '''
+        while self.current_char is not None and self.current_char in Lexer.WHITESPACE:
+            if self.current_char in Lexer.NEWLINE:
+                self.line_no += 1
+                self.line_pos = 1
+            elif self.current_char in Lexer.TAB:
+                self.line_pos += 3
+            self.advance()                
+
+
+    def skip_comment(self):
+        '''Pascal comment '''
+        while self.current_char != '}':
+            self.advance()
+        self.advance()  # the closing curly brace
+
+
+    def _id(self):
+        """Handle identifiers and reserved keywords"""
+        result = ''
+        while self.current_char is not None and self.current_char.isalnum():
+            result += self.current_char
+            self.advance()
+        
+        reserved_token = RESERVED_KEYWORDS.get(result.upper(), None)
+        if reserved_token:
+            token = Token(reserved_token.type, result, self.line_no, self.line_pos)
+        else:
+            token = Token(Token.ID, result, self.line_no, self.line_pos)
+        self.tokens.append(token)             
         return token
 
 
 def runmain():
-    from src.Interpreter import Interpreter
-    from src.Lexer import Lexer
     from src.Semantic_Analyzer import SemanticAnalyzer
     from src.Parser import Parser
+
     while True:
         try:
             text = \
@@ -237,10 +225,13 @@ def runmain():
             break
         if not text:
             continue
+
         lexer = Lexer(text)
         parser = Parser(lexer)
         tree = parser.parse()
+
         semantic_analyzer = SemanticAnalyzer()
+        
         try:
             semantic_analyzer.visit(tree)
         except SystemError as sys_error:
@@ -248,7 +239,7 @@ def runmain():
 
         for token in lexer.tokens:
             print(token)
+
         break
 if __name__ == '__main__':
     runmain()
-
