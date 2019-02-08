@@ -113,6 +113,7 @@ def main():
     #text = open('src/test/nested_scope_03_14.pas', 'r').read()    
     #text = open('src/test/test_14/nested_scope_04_14.pas', 'r').read()
     text = open('src/test/test_14/nested_function_01_14.pas', 'r').read()
+    #text = open('src/test/test_14/barebones.pas', 'r').read()
     
     lexer = Lexer(text)
     parser = Parser(lexer)

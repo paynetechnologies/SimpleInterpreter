@@ -1,0 +1,3 @@
+PROGRAM Main;
+BEGIN
+END.

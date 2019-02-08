@@ -77,15 +77,17 @@ class Lexer(object):
             result += self.current_char
             self.advance()
         
-        token = RESERVED_KEYWORDS.get(result.upper(), None)
-        if token is None:
-            token = Token(Token.ID, result, self.line_no, self.line_pos))
+        reserved_token = RESERVED_KEYWORDS.get(result.upper(), None)
+        if reserved_token:
+            token = Token(reserved_token.type, result, self.line_no, self.line_pos)
+        else:
+            token = Token(Token.ID, result, self.line_no, self.line_pos)
         self.tokens.append(token)             
         return token
 
     def number(self):
         """Return a (multidigit) integer or float consumed from the input."""
-        result = int(self.current_char) - 0
+        result = 0# int(self.current_char) - 0
         while self.current_char is not None and self.current_char.isdigit():
             result = result * 10 + int(self.current_char) - 0
             #result += self.current_char
@@ -140,72 +142,113 @@ class Lexer(object):
                 self.advance()
                 token = Token(Token.ASSIGN, ':=', self.line_no, self.line_pos)
                 self.tokens.append(token)             
-                return Token(Token.ASSIGN, ':=')
+                #return Token(Token.ASSIGN, ':=')
+                return token
 
             # Semi
             if self.current_char == ';':
                 self.advance()
                 token = Token(Token.SEMI, ';', self.line_no, self.line_pos)
                 self.tokens.append(token)             
-                return Token(Token.SEMI, ';')
+                return token
 
             # colon
             if self.current_char == ':':
                 self.advance()
-                return Token(Token.COLON, ':')
+                token = Token(Token.COLON, ':', self.line_no, self.line_pos)
+                self.tokens.append(token)          
+                #return Token(Token.COLON, ':')
+                return token
 
             # Comma
             if self.current_char == ',':
                 self.advance()
-                return Token(Token.COMMA, ',')
+                token = Token(Token.COMMA, ',', self.line_no, self.line_pos)
+                self.tokens.append(token)
+                return token
          
             # Plus
             if self.current_char == '+':
                 self.advance()
-                return Token(Token.PLUS, '+')
+                token = Token(Token.PLUS, '+', self.line_no, self.line_pos)
+                self.tokens.append(token)
+                return token
 
             # Minus
             if self.current_char == '-':
                 self.advance()
-                return Token(Token.MINUS, '-')
+                token = Token(Token.MINUS, '-', self.line_no, self.line_pos)
+                self.tokens.append(token)
+                return token
 
             if self.current_char == '*':
                 self.advance()
-                return Token(Token.MUL, '*')
+                token = Token(Token.MUL, '*', self.line_no, self.line_pos)
+                self.tokens.append(token)
+                return token
 
             if self.current_char == '/':
                 self.advance()
-                return Token(Token.FLOAT_DIV, '/')
+                token = Token(Token.FLOAT_DIV, '/', self.line_no, self.line_pos)
+                self.tokens.append(token)
+                return token
 
             if self.current_char == '(':
                 self.advance()
-                return Token(Token.LPAREN, '(')
+                token = Token(Token.LPAREN, '(', self.line_no, self.line_pos)
+                self.tokens.append(token)
+                return token
 
             if self.current_char == ')':
                 self.advance()
-                return Token(Token.RPAREN, ')')          
+                token = Token(Token.RPAREN, ')', self.line_no, self.line_pos)
+                self.tokens.append(token)                
+                return token      
 
             if self.current_char == '.':
                 self.advance()
-                return Token(Token.DOT, '.')                  
+                token = Token(Token.DOT, '.', self.line_no, self.line_pos)
+                self.tokens.append(token)
+                return token
 
             self.error(f'get_next_token - unknown char : {self.current_char}')
 
-        return Token(Token.EOF, None)
+        token = Token(Token.EOF, 'EOF',self.line_no, self.line_pos)
+        return token
 
 
 def runmain():
     from src.Interpreter import Interpreter
+    from src.Lexer import Lexer
+    from src.Semantic_Analyzer import SemanticAnalyzer
+    from src.Parser import Parser
     while True:
         try:
-            text = input('calc> ')
+            text = \
+                """PROGRAM Test;
+                   VAR
+                       a : INTEGER;
+                   BEGIN
+                       a := 01
+                   END.
+                """            
+            #input('calc> ')
         except EOFError:
             break
         if not text:
             continue
-        interpret = Interpreter(text)
-        result = interpret.interpret()
-        print(result)
+        lexer = Lexer(text)
+        parser = Parser(lexer)
+        tree = parser.parse()
+        semantic_analyzer = SemanticAnalyzer()
+        try:
+            semantic_analyzer.visit(tree)
+        except SystemError as sys_error:
+            print(sys_error)
 
+        for token in lexer.tokens:
+            print(token)
+        break
 if __name__ == '__main__':
     runmain()
+

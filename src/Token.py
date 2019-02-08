@@ -15,43 +15,18 @@ class Token():
         'MINUS', 'MUL', 'PLUS', 'PROCEDURE', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 'VAR'
     ) 
 
-
-    # def __init__(self, type, value):
-    #     self.type = type
-    #     self.value = value         # token value: 0, 1, 2. 3...'+', '-', '*', '/', ID, None
-
-    # def __str__(self):
-    #     """String representation of the class instance.
-
-    #     Examples:
-    #         Token(INTEGER, 3)
-    #         Token(PLUS '+')
-    #         Token(MULTIPLY '*')
-    #     """
-    #     return 'Token({type}, {value})'.format(
-    #         type=self.type,
-    #         value=repr(self.value)
-    #     )
-
     def __repr__(self):
         return self.__str__()
 
     def __init__(self, _type, value, line_no=0, line_pos=0):        
         self.type = _type
         self.value = value
-        #self.line = line
         self.line_no = line_no
-        self.line_pos = line_pos # - len(value)
+        self.line_pos = line_pos #- len(value)
         
     def __str__(self):
-        return '{0}:{1}'.format(self.line_no, self.line_pos).ljust(10) + self.type.ljust(15) + self.value   
+        return '{0}:{1}'.format(self.line_no, self.line_pos).ljust(10) + self.type.ljust(15) + str(self.value)
 
-
-
-# RESERVED_KEYWORDS = {
-#     'BEGIN': Token(Token.BEGIN, Token.BEGIN),
-#     'END': Token(Token.END, Token.END),
-#     }
 
 RESERVED_KEYWORDS = {
     'BEGIN': Token('BEGIN', 'BEGIN'),
@@ -67,5 +42,4 @@ RESERVED_KEYWORDS = {
 }
 
 if __name__ == '__main__':
-    #t = Token(Token.INTEGER, Token.INTEGER)
     print(Token(Token.INTEGER, Token.INTEGER))
