@@ -72,7 +72,7 @@ class Interpreter(NodeVisitor):
 
     def visit_UnaryOp(self, node):
         dprint(f'visit_UnaryOp : {node}')
-        op = node.operand.type
+        op = node.op.type
         if op == Token.PLUS:
             return +self.visit(node.expr)
         elif op == Token.MINUS:

@@ -87,11 +87,12 @@ class Parser():
 
             elif self.current_token.type == Token.FUNCTION:
                 '''
-                program factorial;
-                    function factorial(n: integer): longint;
+                function func(n: integer): longint;
+                    var y : integer;
                     begin
+                        x := y * n;
+                        return x;
                     end;
-                end.
                 '''
                 self.match(Token.FUNCTION)
                 func_name = self.current_token.value

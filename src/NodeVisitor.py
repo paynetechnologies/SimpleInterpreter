@@ -1,5 +1,5 @@
 '''NodeVisitor.py'''  
-d = True
+d = False
 def dprint(msg):
     if d:
         print(msg)

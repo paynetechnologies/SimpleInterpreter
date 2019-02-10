@@ -1,10 +1,6 @@
-'''Token.py'''
 ''' Token Class '''
 class Token():
-    ''' 
-    Token
-    '''
-    # Token types
+    '''Token Types'''
     (
         ASSIGN, BEGIN, COLON, COMMA, DIV, DOT, END, EOF, FLOAT_DIV, 
         FUNCTION, ID, INTEGER, INTEGER_CONST, INTEGER_DIV, LONGINT, LPAREN, 
@@ -15,17 +11,20 @@ class Token():
         'MINUS', 'MUL', 'PLUS', 'PROCEDURE', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 'VAR'
     ) 
 
-    def __repr__(self):
-        return self.__str__()
-
     def __init__(self, _type, value, line_no=0, line_pos=0):        
         self.type = _type
         self.value = value
         self.line_no = line_no
-        self.line_pos = line_pos #- len(value)
+        if self.value is not None:
+            self.line_pos = line_pos - len(value)    
+        else:
+            self.line_pos = line_pos
         
     def __str__(self):
         return '{0}:{1}'.format(self.line_no, self.line_pos).ljust(10) + self.type.ljust(15) + str(self.value)
+
+    def __repr__(self):
+        return self.__str__()
 
 
 RESERVED_KEYWORDS = {

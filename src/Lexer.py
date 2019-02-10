@@ -177,7 +177,7 @@ class Lexer(object):
         while self.current_char is not None and self.current_char in Lexer.WHITESPACE:
             if self.current_char in Lexer.NEWLINE:
                 self.line_no += 1
-                self.line_pos = 1
+                self.line_pos = 0
             elif self.current_char in Lexer.TAB:
                 self.line_pos += 3
             self.advance()                

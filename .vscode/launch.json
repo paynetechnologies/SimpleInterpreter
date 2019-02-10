@@ -55,13 +55,5 @@
             ],
             "jinja": true
         },
-        {
-            "name": "Python: Current File (External Terminal)",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "externalTerminal",
-            "env": {"PYTHONPATH":"${workspaceRoot}"},
-        }
     ]
 }
