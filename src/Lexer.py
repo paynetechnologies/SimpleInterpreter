@@ -45,7 +45,6 @@ class Lexer(object):
         result = 0# int(self.current_char) - 0
         while self.current_char is not None and self.current_char.isdigit():
             result = result * 10 + int(self.current_char) - 0
-            #result += self.current_char
             self.advance()
 
         if self.current_char == '.':
@@ -53,7 +52,6 @@ class Lexer(object):
             self.advance()
 
             while (self.current_char is not None and self.current_char.isdigit()):
-                #result += self.current_char
                 result = result * 10 + int(self.current_char) - 0
                 self.advance()
 
@@ -70,7 +68,7 @@ class Lexer(object):
     def get_next_token(self):
         """
         This method is responsible for breaking a sentence
-        apart into tokens. One token at a time.
+        apart into tokens. One character at a time.
         """
         while self.current_char is not None:
             # space

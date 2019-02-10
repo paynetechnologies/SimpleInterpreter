@@ -27,7 +27,12 @@ class SemanticAnalyzer(NodeVisitor):
 
     def visit_FunctionDecl(self, node):
         func_name = node.func_name
-        proc_symbol = FunctionSymbol(func_name)
+
+        type_name = node.return_type.value
+        type_symbol = self.current_scope.lookup(type_name)
+        proc_symbol = FunctionSymbol(func_name, type_symbol)
+        #proc_symbol = FunctionSymbol(func_name)
+
         self.current_scope.insert(proc_symbol)
 
         print('ENTER scope: %s' %  func_name)

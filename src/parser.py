@@ -106,10 +106,13 @@ class Parser():
                     self.match(Token.RPAREN)
                     self.match(Token.COLON)
                     return_type_node = self.type_spec()
+                    #return_type = self.returntype()
 
                 self.match(Token.SEMI)
                 block_node = self.block()
-                func_decl = FunctionDecl(func_name, params, block_node)
+                func_decl = FunctionDecl(func_name, params, return_type_node, block_node)
+                #func_decl = FunctionDecl(func_name, params, return_type, block_node)                
+
                 declarations.append(func_decl)
                 self.match(Token.SEMI)                
             else:
@@ -307,6 +310,26 @@ class Parser():
         node = Type(token)
         return node
 
+    def return_type(self):
+        """type_spec : INTEGER
+                     | LONGINT
+                     | REAL
+                     | String
+        """
+        token = self.current_token
+
+        if self.current_token.type == Token.INTEGER:
+            self.match(Token.INTEGER)
+        elif self.current_token.type == Token.LONGINT:
+            self.match(Token.LONGINT)            
+        elif self.current_token.type == Token.REAL:            
+            self.match(Token.REAL)                        
+        else:
+            self.match(Token.STRING)
+
+        node = Type(token)
+        return node
+
     def variable(self):
         """
         variable : ID
@@ -329,6 +352,7 @@ class Parser():
         self.match(Token.COLON)
 
         type_node = self.type_spec()
+        
         var_declarations = [
             VarDecl(var_node, type_node)
             for var_node in var_nodes
@@ -350,7 +374,7 @@ class Parser():
 
         declarations : (VAR (variable_declaration SEMI)+)*
            | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
-           | (FUNCTION  ID (LPAREN formal_parameter_list RPAREN : type_spec)? SEMI block SEMI)*
+           | (FUNCTION  ID (LPAREN formal_parameter_list RPAREN : return_type)? SEMI block SEMI)*
            | empty
 
         variable_declaration : ID (COMMA ID)* COLON type_spec
@@ -361,7 +385,8 @@ class Parser():
         formal_parameters : ID (COMMA ID)* COLON type_spec
 
         type_spec : INTEGER | REAL | LONGINT
-        return_type_spec : STRING | INTEGER | LONGINT | REAL
+        
+        return_type : STRING | INTEGER | LONGINT | REAL
         
         compound_statement : BEGIN statement_list END
         

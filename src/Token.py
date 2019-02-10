@@ -4,11 +4,13 @@ class Token():
     (
         ASSIGN, BEGIN, COLON, COMMA, DIV, DOT, END, EOF, FLOAT_DIV, 
         FUNCTION, ID, INTEGER, INTEGER_CONST, INTEGER_DIV, LONGINT, LPAREN, 
-        MINUS, MUL, PLUS, PROCEDURE, PROGRAM,  REAL, REAL_CONST, RPAREN, SEMI, VAR
+        MINUS, MUL, PLUS, PROCEDURE, PROGRAM,  REAL, REAL_CONST, RPAREN, SEMI, 
+        STRING, VAR
     ) = ( 
-        'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'EOF', 'FLOATS_DIV', \
-        'FUNCTION', 'ID', 'INTEGER', 'INTEGER_CONST', 'INTEGER_DIV', 'LONGINT', 'LPAREN', \
-        'MINUS', 'MUL', 'PLUS', 'PROCEDURE', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 'VAR'
+        'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'EOF', 'FLOATS_DIV', 
+        'FUNCTION', 'ID', 'INTEGER', 'INTEGER_CONST', 'INTEGER_DIV', 'LONGINT', 'LPAREN', 
+        'MINUS', 'MUL', 'PLUS', 'PROCEDURE', 'PROGRAM', 'REAL', 'REAL_CONST', 'RPAREN', 'SEMI', 
+        'STRING', 'VAR'
     ) 
 
     def __init__(self, _type, value, line_no=0, line_pos=0):        

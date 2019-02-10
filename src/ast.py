@@ -2,7 +2,20 @@
 from src.Token import Token
 
 class AST(object):
-    pass
+        
+    def __str__(self):
+        return ('AST {cn}'.format(cn=self.__class__.__name__))
+
+        # return '<{class_name}(name={name}, parameters={params})>'.format(
+        #     class_name=self.__class__.__name__,
+        #     name=self.name,
+        #     params=self.params,
+        # )        
+        
+
+    def __repr__(self):
+        return self.__str__()
+    
 
 class Assign(AST):
     def __init__(self, left, op, right):
@@ -27,9 +40,11 @@ class Compound(AST):
         self.children = []
    
 class FunctionDecl(AST):
-    def __init__(self, func_name, params, block_node):
+    def __init__(self, func_name, params, return_type, block_node):
+    #def __init__(self, func_name, params, block_node):        
         self.func_name = func_name
         self.params = params  # a list of Param nodes
+        self.return_type = return_type
         self.block_node = block_node
         
 class NoOp(AST):
