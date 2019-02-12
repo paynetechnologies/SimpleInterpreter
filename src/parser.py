@@ -106,12 +106,10 @@ class Parser():
                     self.match(Token.RPAREN)
                     self.match(Token.COLON)
                     return_type_node = self.type_spec()
-                    #return_type = self.returntype()
 
                 self.match(Token.SEMI)
                 block_node = self.block()
-                func_decl = FunctionDecl(func_name, params, return_type_node, block_node)
-                #func_decl = FunctionDecl(func_name, params, return_type, block_node)                
+                func_decl = FunctionDecl(func_name, params, return_type_node, block_node)              
 
                 declarations.append(func_decl)
                 self.match(Token.SEMI)                

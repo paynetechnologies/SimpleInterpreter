@@ -6,7 +6,6 @@
 ###############################################################################
 
 from collections import OrderedDict
-from src.NodeVisitor import NodeVisitor
 
 
 class Symbol(object):
@@ -66,10 +65,10 @@ class FunctionSymbol(Symbol):
         super().__init__(name, _type)        
 
         self.params = params if params is not None else []
+        self.type = _type
 
     def __str__(self):
-        #return(f"<{self.__class__.__name__}(name={self.name}, parameters={self.params}, return type = {self.type})>")
-        return(f"<{self.__class__.__name__}(name={self.name}, parameters={self.params})>")        
+        return(f"<{self.__class__.__name__}(name={self.name}, parameters={self.params}), returntype={self.type}>")
 
     __repr__ = __str__
 

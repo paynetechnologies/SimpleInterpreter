@@ -29,13 +29,13 @@ class SemanticAnalyzer(NodeVisitor):
         func_name = node.func_name
 
         type_name = node.return_type.value
-        type_symbol = self.current_scope.lookup(type_name)
-        proc_symbol = FunctionSymbol(func_name, type_symbol)
-        #proc_symbol = FunctionSymbol(func_name)
+        type_symbol = self.current_scope.lookup(str.upper(type_name))
+        func_symbol = FunctionSymbol(func_name, type_symbol)
 
-        self.current_scope.insert(proc_symbol)
+        self.current_scope.insert(func_symbol)
 
         print('ENTER scope: %s' %  func_name)
+
         # Scope for parameters and local variables
         function_scope = ScopedSymbolTable(
             scope_name=func_name,
@@ -47,11 +47,11 @@ class SemanticAnalyzer(NodeVisitor):
 
         # Insert parameters into the function_scope
         for param in node.params:
-            param_type = self.current_scope.lookup(param.type_node.value)
+            param_type = self.current_scope.lookup(str.upper(param.type_node.value))
             param_name = param.var_node.value
             var_symbol = VarSymbol(param_name, param_type)
             self.current_scope.insert(var_symbol)
-            proc_symbol.params.append(var_symbol)
+            func_symbol.params.append(var_symbol)
 
         self.visit(node.block_node)
         print(function_scope)
