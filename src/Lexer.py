@@ -1,5 +1,7 @@
-from src.Token import Token, RESERVED_KEYWORDS
 '''Lexical analyzer (also known as scanner or tokenizer)'''
+from src.Token import Token, RESERVED_KEYWORDS
+
+
 
 class Lexer(object):
     '''Lexer'''
@@ -80,7 +82,7 @@ class Lexer(object):
             if self.current_char == '{':
                 self.advance()
                 self.skip_comment()
-                continue       
+                continue   
 
             # alpha
             if self.current_char.isalpha():
@@ -215,7 +217,7 @@ def runmain():
                    VAR
                        a : INTEGER;
                    BEGIN
-                       a := 01
+                       a := 1
                    END.
                 """            
             #input('calc> ')

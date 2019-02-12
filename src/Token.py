@@ -4,7 +4,7 @@ class Token():
     (
         ASSIGN, BEGIN, COLON, COMMA, DIV, DOT, END, EOF, FLOAT_DIV, 
         FUNCTION, ID, INTEGER, INTEGER_CONST, INTEGER_DIV, LONGINT, LPAREN, 
-        MINUS, MUL, PLUS, PROCEDURE, PROGRAM,  REAL, REAL_CONST, RPAREN, SEMI, 
+        MINUS, MUL, PLUS, PROCEDURE, PROGRAM, REAL, REAL_CONST, RPAREN, SEMI, 
         STRING, VAR
     ) = ( 
         'ASSIGN', 'BEGIN', 'COLON', 'COMMA', 'DIV', 'DOT', 'END', 'EOF', 'FLOATS_DIV', 
@@ -18,7 +18,7 @@ class Token():
         self.value = value
         self.line_no = line_no
         if self.value is not None:
-            self.line_pos = line_pos - len(value)    
+            self.line_pos = line_pos - len(str(value))    
         else:
             self.line_pos = line_pos
         
@@ -39,7 +39,7 @@ RESERVED_KEYWORDS = {
     'PROCEDURE' : Token('PROCEDURE', 'PROCEDURE'),
     'PROGRAM': Token('PROGRAM', 'PROGRAM'),
     'REAL': Token('REAL', 'REAL'),
-    'VAR': Token('VAR', 'VAR'),    
+    'VAR': Token('VAR', 'VAR')
 }
 
 if __name__ == '__main__':
