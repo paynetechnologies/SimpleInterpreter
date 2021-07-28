@@ -1,10 +1,10 @@
 '''Interpreter.py'''
 import collections
-from src.Token import Token
-from src.Lexer import Lexer
-from src.Parser import Parser
-from src.NodeVisitor import NodeVisitor
-from src.Semantic_Analyzer import SemanticAnalyzer
+from Token import Token
+from Lexer import Lexer
+from Parser import Parser
+from NodeVisitor import NodeVisitor
+from Semantic_Analyzer import SemanticAnalyzer
 
 
 DBUG = True

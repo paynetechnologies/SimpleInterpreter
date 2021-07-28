@@ -1,5 +1,5 @@
-from src.NodeVisitor import NodeVisitor
-from src.SymbolTable import ScopedSymbolTable, ProcedureSymbol, VarSymbol, FunctionSymbol
+from NodeVisitor import NodeVisitor
+from SymbolTable import ScopedSymbolTable, ProcedureSymbol, VarSymbol, FunctionSymbol
 
 
 class SemanticAnalyzer(NodeVisitor):

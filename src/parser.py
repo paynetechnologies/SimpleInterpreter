@@ -1,7 +1,7 @@
 '''Parser.py'''
-from src.Ast import Assign, BinOp, Block, Compound, FunctionDecl, \
+from Ast import Assign, BinOp, Block, Compound, FunctionDecl, \
     NoOp, Num, Param, ProcedureDecl, Program, Type, UnaryOp, Var, VarDecl
-from src.Token import Token
+from Token import Token
 
 
 
